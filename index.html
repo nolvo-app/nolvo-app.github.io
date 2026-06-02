@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nolvo – Herzschmerz hat eine Neurobiologie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:         #F6F4F1;
+      --bg-card:    #EDEBE7;
+      --white:      #FFFFFF;
+      --ink:        #0F1A2E;
+      --ink-mid:    #1E3A5F;
+      --ink-dim:    #5A7A9E;
+      --ink-faint:  #B0C4D8;
+      --ink-ghost:  rgba(15,26,46,0.06);
+      --accent:     #1B2B4B;
+      --accent-mid: #2D4270;
+      --accent-light: rgba(27,43,75,0.08);
+      --border:     rgba(15,26,46,0.1);
+      --border-mid: rgba(15,26,46,0.16);
+      --text:       #1A1A1A;
+      --text-mid:   #4A4A4A;
+      --text-dim:   #888888;
+      --font:       'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --r-sm:       8px;
+      --r:          14px;
+      --r-lg:       24px;
+      --max:        1140px;
+      --ease:       cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 40px; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 48px); max-width: 1200px;
+      z-index: 200;
+      padding: 0 28px;
+      height: 60px;
+      border-radius: 100px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s var(--ease), backdrop-filter 0.4s, box-shadow 0.4s;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    nav.transparent {
+      background: rgba(10,16,28,0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    nav.scrolled {
+      background: rgba(10,16,28,0.88);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+    }
+    /* Logo white when transparent, dark when scrolled */
+    .nav-logo-svg { transition: fill 0.4s; }
+    .nav-logo-svg path { fill: #ffffff; }
+
+    .nav-logo { display: flex; align-items: center; }
+    .nav-logo svg { height: 28px; width: auto; }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link {
+      font-size: 13px; font-weight: 500;
+      transition: color 0.25s;
+    }
+    .nav-link { color: rgba(255,255,255,0.65); }
+    .nav-link:hover { color: #fff; }
+
+    .nav-cta {
+      font-size: 13px; font-weight: 600;
+      padding: 9px 22px; border-radius: 100px;
+      transition: all 0.25s var(--ease);
+      letter-spacing: -0.01em;
+    }
+    nav.transparent .nav-cta {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+    }
+    nav.transparent .nav-cta:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    nav.scrolled .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid transparent;
+    }
+    nav.scrolled .nav-cta:hover {
+      background: var(--accent-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(27,43,75,0.3);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+
+    /* CSS Gradient background – full hero */
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 65% 0%, #2A4A6B 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, #0D2235 0%, transparent 55%),
+        radial-gradient(ellipse at 0% 60%, #1A3550 0%, transparent 45%),
+        linear-gradient(175deg, #1A3550 0%, #0D1E2E 45%, #060E18 100%);
+    }
+
+    /* Subtle noise texture overlay */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* Person placeholder – center right */
+    .hero-person {
+      position: absolute;
+      bottom: 0;
+      right: 8%;
+      height: 90%;
+      width: auto;
+      z-index: 2;
+      /* Fade bottom */
+      -webkit-mask-image: linear-gradient(to top, transparent 0%, black 18%);
+      mask-image: linear-gradient(to top, transparent 0%, black 18%);
+    }
+    .hero-person img {
+      height: 100%; width: auto;
+      object-fit: contain;
+      object-position: bottom;
+    }
+    /* Placeholder box */
+    .hero-person-placeholder {
+      height: 100%; width: 360px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+    }
+    .hero-person-placeholder span {
+      font-size: 11px; color: rgba(255,255,255,0.2);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center; line-height: 1.8;
+    }
+
+    /* Left gradient fade so text is readable */
+    .hero-fade {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to right, rgba(10,18,28,0.85) 0%, rgba(10,18,28,0.5) 45%, transparent 75%),
+        linear-gradient(to top, rgba(6,14,24,0.6) 0%, transparent 30%);
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative; z-index: 3;
+      width: 100%;
+      padding: 0 0 72px;
+    }
+    .hero-inner {
+      max-width: var(--max); margin: 0 auto; padding: 0 40px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent-mid);
+      flex-shrink: 0;
+    }
+    .hero-h1 {
+      font-size: clamp(40px, 5.5vw, 80px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #fff;
+      max-width: 580px;
+      margin-bottom: 20px;
+    }
+    .hero-h1 span {
+      color: rgba(255,255,255,0.38);
+      font-weight: 300;
+      display: block;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      max-width: 420px; line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-hero-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent);
+      color: #fff; font-family: var(--font);
+      font-size: 14px; font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 15px 32px; border-radius: 100px; border: none; cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+    .btn-hero-primary:hover {
+      background: var(--accent-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(27,43,75,0.4);
+    }
+    .btn-hero-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.75);
+      font-family: var(--font); font-size: 14px; font-weight: 500;
+      padding: 15px 28px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15); cursor: pointer;
+      transition: all 0.25s var(--ease);
+      backdrop-filter: blur(8px);
+    }
+    .btn-hero-ghost:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    /* Trust bar inside hero bottom */
+    .hero-trust {
+      display: flex; align-items: center; gap: 32px; flex-wrap: wrap;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-trust-item {
+      display: flex; flex-direction: column; gap: 3px;
+    }
+    .hero-trust-label {
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .hero-trust-value {
+      font-size: 14px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .hero-trust-divider {
+      width: 1px; height: 32px;
+      background: rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+
+    /* ── PROBLEM ── */
+    .problem { padding: 128px 0; }
+    .problem-grid {
+      display: grid; grid-template-columns: 5fr 7fr;
+      gap: 96px; align-items: start;
+    }
+    .problem-sticky { position: sticky; top: 96px; }
+    .problem-h2 {
+      font-size: clamp(28px, 3.2vw, 44px);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .problem-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .problem-body { font-size: 15px; color: var(--text-mid); line-height: 1.75; }
+    .problem-items { display: flex; flex-direction: column; gap: 2px; }
+    .problem-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 26px 28px; background: var(--white);
+      border-radius: var(--r); border: 1px solid transparent;
+      transition: all 0.3s var(--ease); cursor: default;
+    }
+    .problem-item:hover {
+      border-color: rgba(27,43,75,0.15);
+      transform: translateX(6px);
+      box-shadow: 0 4px 24px rgba(15,26,46,0.06);
+    }
+    .problem-num { font-size: 12px; font-weight: 700; color: var(--ink-faint); min-width: 22px; padding-top: 3px; }
+    .problem-text strong { display: block; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 5px; letter-spacing: -0.01em; }
+    .problem-text p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── QUIZ ── */
+    .quiz-section {
+      padding: 128px 0;
+      background: var(--ink);
+      position: relative; overflow: hidden;
+    }
+    .quiz-section::before {
+      content: '';
+      position: absolute; top: -30%; right: -15%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(27,43,75,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .quiz-section::after {
+      content: '';
+      position: absolute; bottom: -20%; left: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(30,90,130,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .quiz-header { text-align: center; margin-bottom: 64px; }
+    .quiz-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent-mid); margin-bottom: 20px;
+    }
+    .quiz-tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent-mid); border-radius: 2px; }
+    .quiz-h2 {
+      font-size: clamp(28px, 4vw, 52px); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.05; color: #fff; margin-bottom: 16px;
+    }
+    .quiz-h2 span { color: rgba(255,255,255,0.35); font-weight: 300; }
+    .quiz-sub { font-size: 15px; color: rgba(255,255,255,0.45); max-width: 460px; margin: 0 auto; line-height: 1.7; }
+
+    .quiz-wrap { max-width: 640px; margin: 0 auto; position: relative; z-index: 2; }
+    .quiz-progress { display: flex; gap: 4px; margin-bottom: 40px; }
+    .quiz-bar { height: 2px; flex: 1; background: rgba(255,255,255,0.1); border-radius: 2px; transition: background 0.4s; }
+    .quiz-bar.active { background: var(--accent-mid); }
+
+    .quiz-step { display: none; }
+    .quiz-step.visible { display: block; }
+    .quiz-q {
+      font-size: clamp(20px, 2.5vw, 28px); font-weight: 600;
+      letter-spacing: -0.02em; color: #fff; line-height: 1.3; margin-bottom: 28px;
+    }
+    .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--r-sm); cursor: pointer;
+      transition: all 0.22s var(--ease);
+      font-family: var(--font); font-size: 14px; font-weight: 400;
+      color: rgba(255,255,255,0.6); text-align: left; width: 100%;
+    }
+    .quiz-opt:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.18); }
+    .quiz-opt.selected { background: rgba(27,43,75,0.15); border-color: var(--accent-mid); color: #fff; }
+    .quiz-letter {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35);
+      flex-shrink: 0; transition: all 0.22s; letter-spacing: 0.05em;
+    }
+    .quiz-opt.selected .quiz-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .quiz-nav { display: flex; justify-content: flex-end; margin-top: 24px; }
+    .btn-quiz-next {
+      background: var(--accent); color: #fff;
+      font-family: var(--font); font-size: 13px; font-weight: 700;
+      letter-spacing: -0.01em; padding: 13px 28px; border-radius: 100px;
+      border: none; cursor: pointer; transition: all 0.25s;
+      opacity: 0.3; pointer-events: none;
+    }
+    .btn-quiz-next.ready { opacity: 1; pointer-events: all; }
+    .btn-quiz-next:hover { background: var(--accent-mid); transform: translateY(-1px); }
+
+    .quiz-result { display: none; }
+    .quiz-result.visible { display: block; }
+    .result-badge {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); background: rgba(27,43,75,0.15);
+      border: 1px solid rgba(27,43,75,0.3);
+      padding: 5px 14px; border-radius: 100px; margin-bottom: 20px;
+    }
+    .result-type { font-size: clamp(24px, 3.5vw, 40px); font-weight: 700; letter-spacing: -0.03em; color: #fff; margin-bottom: 14px; line-height: 1.1; }
+    .result-desc { font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.75; margin-bottom: 32px; max-width: 500px; }
+    .result-input {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--r-sm); color: #fff; font-family: var(--font);
+      font-size: 15px; padding: 16px 20px; outline: none; transition: border 0.25s; width: 100%;
+      margin-bottom: 10px;
+    }
+    .result-input::placeholder { color: rgba(255,255,255,0.25); }
+    .result-input:focus { border-color: var(--accent-mid); }
+    .result-note { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5; margin-top: 10px; }
+
+    /* ── HOW ── */
+    .how { padding: 128px 0; }
+    .how-header { margin-bottom: 64px; }
+    .how-h2 { font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 12px; }
+    .how-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .how-sub { font-size: 15px; color: var(--text-dim); max-width: 460px; line-height: 1.7; }
+    .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .how-card {
+      background: var(--white); border-radius: var(--r); padding: 30px 26px;
+      border: 1px solid transparent; transition: all 0.3s var(--ease);
+    }
+    .how-card:hover { border-color: rgba(27,43,75,0.15); box-shadow: 0 8px 32px rgba(15,26,46,0.07); transform: translateY(-4px); }
+    .how-num { font-size: 12px; font-weight: 700; color: var(--ink-faint); letter-spacing: 0.06em; margin-bottom: 20px; }
+    .how-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--accent-light); display: flex; align-items: center; justify-content: center;
+      font-size: 17px; margin-bottom: 14px;
+    }
+    .how-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .how-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── SCIENCE ── */
+    .science { padding: 128px 0; background: var(--bg-card); }
+    .science-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: center; }
+    .science-h2 { font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 18px; }
+    .science-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .science-body { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 32px; }
+    .science-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stat-card { background: var(--white); border-radius: var(--r); padding: 22px; border: 1px solid var(--border); transition: all 0.25s; }
+    .stat-card:hover { box-shadow: 0 4px 20px rgba(15,26,46,0.07); }
+    .stat-num { font-size: 36px; font-weight: 700; color: var(--accent); letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+    .science-quotes { display: flex; flex-direction: column; gap: 14px; }
+    .sci-quote { background: var(--white); border-radius: var(--r); padding: 26px; border: 1px solid var(--border); border-left: 3px solid var(--accent); transition: all 0.25s; }
+    .sci-quote:hover { box-shadow: 0 4px 20px rgba(15,26,46,0.07); }
+    .sci-quote-text { font-size: 15px; font-weight: 400; color: var(--ink); line-height: 1.6; margin-bottom: 10px; font-style: italic; }
+    .sci-quote-src { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* ── WAITLIST ── */
+    .waitlist { padding: 140px 0; text-align: center; position: relative; overflow: hidden; }
+    .waitlist::before {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(27,43,75,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .waitlist-h2 { font-size: clamp(32px, 5vw, 62px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; color: var(--ink); max-width: 600px; margin: 0 auto 18px; }
+    .waitlist-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .waitlist-sub { font-size: 16px; color: var(--text-dim); max-width: 400px; margin: 0 auto 44px; line-height: 1.7; }
+    .waitlist-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; }
+    .waitlist-input {
+      flex: 1; background: var(--white); border: 1.5px solid var(--border-mid);
+      border-radius: 100px; color: var(--text); font-family: var(--font);
+      font-size: 14px; padding: 14px 22px; outline: none; transition: border 0.25s;
+    }
+    .waitlist-input::placeholder { color: var(--text-dim); }
+    .waitlist-input:focus { border-color: var(--accent); }
+    .btn-primary {
+      display: inline-flex; align-items: center;
+      background: var(--accent); color: #fff; font-family: var(--font);
+      font-size: 14px; font-weight: 600; letter-spacing: -0.01em;
+      padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer;
+      transition: all 0.25s var(--ease); white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--accent-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,43,75,0.3); }
+    .waitlist-note { font-size: 12px; color: var(--text-dim); }
+
+    /* ── FOOTER ── */
+    footer { padding: 36px 0; border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; }
+    .footer-logo svg { height: 22px; width: auto; }
+    .footer-logo svg path { fill: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--text-dim); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-link { font-size: 12px; color: var(--text-dim); transition: color 0.2s; }
+    .footer-link:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    .hero-eyebrow { animation: fadeUp 0.8s var(--ease) both 0.15s; }
+    .hero-h1      { animation: fadeUp 0.8s var(--ease) both 0.28s; }
+    .hero-sub     { animation: fadeUp 0.8s var(--ease) both 0.4s; }
+    .hero-actions { animation: fadeUp 0.8s var(--ease) both 0.52s; }
+    .hero-trust   { animation: fadeUp 0.8s var(--ease) both 0.64s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero-person { right: 0; height: 75%; opacity: 0.6; }
+      .problem-grid { grid-template-columns: 1fr; gap: 40px; }
+      .problem-sticky { position: static; }
+      .science-grid { grid-template-columns: 1fr; gap: 48px; }
+      .how-grid { grid-template-columns: 1fr 1fr; }
+      .waitlist-form { flex-direction: column; }
+      .waitlist-input { border-radius: var(--r-sm); }
+      .btn-primary { border-radius: var(--r-sm); }
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero-inner { padding: 0 24px; }
+      .container { padding: 0 24px; }
+    }
+    @media (max-width: 600px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .science-stats { grid-template-columns: 1fr 1fr; }
+      .hero-h1 { font-size: 38px; }
+      .hero-person { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="transparent" id="navbar">
+    <div class="nav-logo">
+      <svg class="nav-logo-svg" viewBox="0 0 111.31038 87.800797" xmlns="http://www.w3.org/2000/svg">
+        <path style="fill:#ffffff;stroke-width:0" d="m 60.34792,222.74738 v 84.45135 h 28.455017 l 41.067043,-53.30931 c 4.50083,-4.64165 5.72823,-4.25274 7.60189,-4.35336 0.69599,-0.0374 3.89641,0.12149 5.01043,4.43669 l 2.54166,53.09712 h 26.63435 v -57.3935 c -1.76594,-16.63396 -35.12463,-58.89639 -73.539113,0 L 87.39475,263.81851 v -40.89435 z" transform="translate(-60.347921,-219.39793)" />
+      </svg>
+    </div>
+    <div class="nav-links">
+      <a href="#how" class="nav-link">Wie es funktioniert</a>
+      <a href="#science" class="nav-link">Wissenschaft</a>
+    </div>
+    <a href="#quiz" class="nav-cta">Quiz starten</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-fade"></div>
+
+    <!-- PERSON – ersetze mit deinem freigestellten PNG -->
+    <div class="hero-person">
+      <div class="hero-person-placeholder">
+        <span>hero.png<br>hier einsetzen</span>
+      </div>
+      <!-- Wenn Bild bereit: <img src="hero.png" alt=""> -->
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-dot"></div>
+          Basiert auf Neurobiologie
+        </div>
+        <h1 class="hero-h1">
+          Herzschmerz hat<br>
+          eine Wissenschaft.
+          <span>Kein Drama.</span>
+        </h1>
+        <p class="hero-sub">
+          Für Männer die verstehen wollen was wirklich passiert – und was tatsächlich hilft.
+        </p>
+        <div class="hero-actions">
+          <a href="#quiz" class="btn-hero-primary">Gratis Quiz starten →</a>
+          <a href="#how" class="btn-hero-ghost">Wie es funktioniert</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Basiert auf</div>
+            <div class="hero-trust-value">Wissenschaft</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Gemacht für</div>
+            <div class="hero-trust-value">Männer</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Kein</div>
+            <div class="hero-trust-value">Therapie-Ersatz</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Komplett</div>
+            <div class="hero-trust-value">Kostenlos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div class="problem-sticky">
+          <div class="tag">Das Problem</div>
+          <h2 class="problem-h2">Du funktionierst.<br><span>Aber irgendwas stimmt nicht.</span></h2>
+          <p class="problem-body">Männer nach Trennungen verdrängen, ablenken, funktionieren. Nicht weil sie schwach sind – sondern weil es dafür kaum etwas gibt das wirklich passt.</p>
+        </div>
+        <div class="problem-items">
+          <div class="problem-item">
+            <div class="problem-num">01</div>
+            <div class="problem-text">
+              <strong>Du schläfst nicht</strong>
+              <p>Cortisol hält dich wach. Das ist keine Einbildung – das ist messbare Physiologie nach sozialem Verlust.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">02</div>
+            <div class="problem-text">
+              <strong>Du checkst ihr Profil</strong>
+              <p>Variable Belohnungsschleifen. Dein Gehirn sucht Dopamin. Es ist neurobiologisch wie eine Sucht.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">03</div>
+            <div class="problem-text">
+              <strong>Du redest mit niemandem</strong>
+              <p>Nicht weil du nichts zu sagen hättest. Sondern weil du keine Struktur hast wie du anfangen sollst.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">04</div>
+            <div class="problem-text">
+              <strong>Du weisst nicht wo du stehst</strong>
+              <p>Wie lange dauert das noch? Ist das normal? Was kommt als nächstes? Keine Antworten, nirgendwo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="quiz-section" id="quiz">
+    <div class="container">
+      <div class="quiz-header">
+        <div class="quiz-tag">Dein persönlicher Plan</div>
+        <h2 class="quiz-h2">Finde heraus in welcher<br><span>Phase du bist</span></h2>
+        <p class="quiz-sub">5 kurze Fragen. Dein persönliches Ergebnis kommt per Email – mit einem 5-tägigen Guide der genau zu deiner Situation passt.</p>
+      </div>
+      <div class="quiz-wrap">
+        <div class="quiz-progress">
+          <div class="quiz-bar active" id="pb1"></div>
+          <div class="quiz-bar" id="pb2"></div>
+          <div class="quiz-bar" id="pb3"></div>
+          <div class="quiz-bar" id="pb4"></div>
+          <div class="quiz-bar" id="pb5"></div>
+        </div>
+        <div class="quiz-step visible" id="step1">
+          <p class="quiz-q">Wie lange ist die Trennung her?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="1" data-v="a"><span class="quiz-letter">A</span>Gerade passiert – weniger als eine Woche</button>
+            <button class="quiz-opt" data-q="1" data-v="b"><span class="quiz-letter">B</span>1 bis 4 Wochen</button>
+            <button class="quiz-opt" data-q="1" data-v="c"><span class="quiz-letter">C</span>1 bis 3 Monate</button>
+            <button class="quiz-opt" data-q="1" data-v="d"><span class="quiz-letter">D</span>Länger als 3 Monate – aber ich stecke noch fest</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next1" onclick="nextStep(1)">Weiter →</button></div>
+        </div>
+        <div class="quiz-step" id="step2">
+          <p class="quiz-q">Was ist dein häufigster Gedanke gerade?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="2" data-v="a"><span class="quiz-letter">A</span>Ich will sie zurück</button>
+            <button class="quiz-opt" data-q="2" data-v="b"><span class="quiz-letter">B</span>Ich verstehe nicht warum das passiert ist</button>
+            <button class="quiz-opt" data-q="2" data-v="c"><span class="quiz-letter">C</span>Ich bin wütend – auf sie oder auf mich</button>
+            <button class="quiz-opt" data-q="2" data-v="d"><span class="quiz-letter">D</span>Ich fühle eigentlich nichts – nur Leere</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next2" onclick="nextStep(2)">Weiter →</button></div>
+        </div>
+        <div class="quiz-step" id="step3">
+          <p class="quiz-q">Was machst du um nicht zu denken?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="3" data-v="a"><span class="quiz-letter">A</span>Gym – ich trainiere mehr als je zuvor</button>
+            <button class="quiz-opt" data-q="3" data-v="b"><span class="quiz-letter">B</span>Arbeit oder Gaming – Hauptsache beschäftigt</button>
+            <button class="quiz-opt" data-q="3" data-v="c"><span class="quiz-letter">C</span>Dating-Apps – ich versuche es zu übertünchen</button>
+            <button class="quiz-opt" data-q="3" data-v="d"><span class="quiz-letter">D</span>Nichts – ich kann nicht abschalten</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next3" onclick="nextStep(3)">Weiter →</button></div>
+        </div>
+        <div class="quiz-step" id="step4">
+          <p class="quiz-q">Hast du mit jemandem darüber geredet?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="4" data-v="a"><span class="quiz-letter">A</span>Nein – niemand weiss wie es mir wirklich geht</button>
+            <button class="quiz-opt" data-q="4" data-v="b"><span class="quiz-letter">B</span>Nur oberflächlich – «Ja, passt schon»</button>
+            <button class="quiz-opt" data-q="4" data-v="c"><span class="quiz-letter">C</span>Ja, aber es hat nicht wirklich geholfen</button>
+            <button class="quiz-opt" data-q="4" data-v="d"><span class="quiz-letter">D</span>Ich weiss nicht einmal was ich sagen soll</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next4" onclick="nextStep(4)">Weiter →</button></div>
+        </div>
+        <div class="quiz-step" id="step5">
+          <p class="quiz-q">Was willst du gerade am meisten?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="5" data-v="a"><span class="quiz-letter">A</span>Verstehen was in mir vorgeht</button>
+            <button class="quiz-opt" data-q="5" data-v="b"><span class="quiz-letter">B</span>Endlich wieder schlafen können</button>
+            <button class="quiz-opt" data-q="5" data-v="c"><span class="quiz-letter">C</span>Aufhören an sie zu denken</button>
+            <button class="quiz-opt" data-q="5" data-v="d"><span class="quiz-letter">D</span>Einfach wieder normal sein</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next5" onclick="showResult()">Ergebnis anzeigen →</button></div>
+        </div>
+        <div class="quiz-result" id="quiz-result">
+          <div class="result-badge">Dein Ergebnis</div>
+          <h3 class="result-type" id="result-type"></h3>
+          <p class="result-desc" id="result-desc"></p>
+          <label style="font-size:13px;color:rgba(255,255,255,0.4);display:block;margin-bottom:8px;">Dein 5-Tage-Guide kommt per Email</label>
+          <input type="email" class="result-input" placeholder="deine@email.de" id="quiz-email" />
+          <button class="btn-primary" onclick="submitQuiz()" style="width:100%;justify-content:center;border-radius:var(--r-sm);margin-top:2px;">Guide erhalten + App-Update →</button>
+          <p class="result-note">Kein Spam. Du erhältst deinen Guide und wirst informiert wenn Nolvo live geht.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="how-header">
+        <div class="tag">So funktioniert es</div>
+        <h2 class="how-h2">Vier Schritte.<br><span>Ein klarer Weg.</span></h2>
+        <p class="how-sub">Kein Programm das ewig dauert. Konkrete Schritte die du sofort machen kannst.</p>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">01</div>
+          <div class="how-icon">🧠</div>
+          <div class="how-title">Quiz machen</div>
+          <div class="how-text">5 Fragen. Keine Diagnose. Nur Klarheit darüber wo du gerade stehst.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">02</div>
+          <div class="how-icon">🎯</div>
+          <div class="how-title">Typ erhalten</div>
+          <div class="how-text">Dein persönliches Ergebnis zeigt welches Muster du gerade lebst – und warum.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">03</div>
+          <div class="how-icon">📩</div>
+          <div class="how-title">5-Tage-Guide</div>
+          <div class="how-text">Täglich eine Email. Konkret, direkt, auf deinen Typ zugeschnitten.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">04</div>
+          <div class="how-icon">⚡</div>
+          <div class="how-title">Nolvo App</div>
+          <div class="how-text">Wir bauen das weiter. Du erfährst es als Erster wenn es fertig ist.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCIENCE -->
+  <section class="science" id="science">
+    <div class="container">
+      <div class="science-grid">
+        <div>
+          <div class="tag">Basiert auf Forschung</div>
+          <h2 class="science-h2">Kein Bauchgefühl.<br><span>Neurobiologie.</span></h2>
+          <p class="science-body">Liebesschmerz aktiviert dieselben Hirnareale wie Kokainentzug – messbar im fMRI-Scanner. Das erklärt warum du dich so verhältst wie du dich verhältst.</p>
+          <div class="science-stats">
+            <div class="stat-card"><div class="stat-num">83%</div><div class="stat-label">berichten nach aktiver Verarbeitung von persönlichem Wachstum</div></div>
+            <div class="stat-card"><div class="stat-num">72h</div><div class="stat-label">neurobiologischer Peak-Schmerz nach Trennung</div></div>
+            <div class="stat-card"><div class="stat-num">21d</div><div class="stat-label">bis Gedankenmuster unterbrochen werden können</div></div>
+            <div class="stat-card"><div class="stat-num">30%</div><div class="stat-label">Cortisolanstieg nach sozialem Verlust – messbar</div></div>
+          </div>
+        </div>
+        <div class="science-quotes">
+          <div class="sci-quote">
+            <p class="sci-quote-text">«Sozialer Schmerz aktiviert identische Hirnregionen wie physischer Schmerz.»</p>
+            <div class="sci-quote-src">Kross et al., PNAS 2011</div>
+          </div>
+          <div class="sci-quote">
+            <p class="sci-quote-text">«Liebesschmerz und Kokain-Entzug sind neurobiologisch nicht zu unterscheiden.»</p>
+            <div class="sci-quote-src">Fisher et al., Rutgers University 2010</div>
+          </div>
+          <div class="sci-quote">
+            <p class="sci-quote-text">«83% der Menschen berichten nach aktiver Verarbeitung von persönlichem Wachstum.»</p>
+            <div class="sci-quote-src">Tashiro & Frazier, 2003</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist">
+    <div class="container">
+      <div class="tag" style="justify-content:center;">Nolvo · Coming Soon</div>
+      <h2 class="waitlist-h2">Sei dabei wenn<br><span>Nolvo live geht.</span></h2>
+      <p class="waitlist-sub">Wir bauen gerade etwas für Männer in genau dieser Situation. Kein Datum – aber du erfährst es als Erster.</p>
+      <div class="waitlist-form">
+        <input type="email" class="waitlist-input" placeholder="deine@email.de" />
+        <button class="btn-primary">Dabei sein →</button>
+      </div>
+      <p class="waitlist-note">Kein Spam. Nur eine Nachricht wenn Nolvo fertig ist.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <svg viewBox="0 0 111.31038 87.800797" xmlns="http://www.w3.org/2000/svg">
+            <path style="fill:#0F1A2E;stroke-width:0" d="m 60.34792,222.74738 v 84.45135 h 28.455017 l 41.067043,-53.30931 c 4.50083,-4.64165 5.72823,-4.25274 7.60189,-4.35336 0.69599,-0.0374 3.89641,0.12149 5.01043,4.43669 l 2.54166,53.09712 h 26.63435 v -57.3935 c -1.76594,-16.63396 -35.12463,-58.89639 -73.539113,0 L 87.39475,263.81851 v -40.89435 z" transform="translate(-60.347921,-219.39793)" />
+          </svg>
+        </div>
+        <div class="footer-copy">© 2025 Nolvo. Alle Rechte vorbehalten.</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Datenschutz</a>
+          <a href="#" class="footer-link">Impressum</a>
+          <a href="mailto:hello@nolvo.app" class="footer-link">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll behavior
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.remove('transparent');
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+        navbar.classList.add('transparent');
+      }
+    });
+
+    // Quiz logic
+    const answers = {};
+    document.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const q = this.dataset.q;
+        document.querySelectorAll(`.quiz-opt[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        answers[q] = this.dataset.v;
+        const nb = document.getElementById(`next${q}`);
+        if (nb) nb.classList.add('ready');
+      });
+    });
+
+    function nextStep(current) {
+      if (!answers[current]) return;
+      document.getElementById(`step${current}`).classList.remove('visible');
+      document.getElementById(`step${current+1}`).classList.add('visible');
+      document.getElementById(`pb${current+1}`).classList.add('active');
+      document.getElementById('quiz').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    const types = {
+      a: { name:'Der Verdränger', desc:'Du funktionierst nach aussen – Gym, Arbeit, Routine. Aber innen läuft etwas auf Hochtouren das du noch nicht angeschaut hast. Dein 5-Tage-Guide hilft dir zu verstehen was passiert – ohne dass du über Gefühle reden musst.' },
+      b: { name:'Der Grübler', desc:'Du denkst zu viel nach. Der Kopf hört nachts nicht auf. Du willst verstehen warum das passiert ist – und findest keine Antwort. Dein Guide erklärt was in deinem Gehirn passiert und gibt dir konkrete Werkzeuge.' },
+      c: { name:'Der Rationaliserer', desc:'Du versuchst es zu verstehen, zu erklären, zu verhandeln. Das ist Phase 2 – die gefährlichste. Dein Guide zeigt dir warum und gibt dir Struktur für die nächsten Wochen.' },
+      d: { name:'Der Isolierte', desc:'Du ziehst dich zurück. Niemand weiss wirklich wie es dir geht. Das ist ein Muster das viele Männer kennen. Dein Guide gibt dir einen konkreten ersten Schritt – ohne dass du dich erklären musst.' }
+    };
+
+    function showResult() {
+      if (!answers[5]) return;
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('visible'));
+      document.querySelectorAll('.quiz-bar').forEach(b => b.classList.add('active'));
+      const type = types[answers[2]] || types.a;
+      document.getElementById('result-type').textContent = type.name;
+      document.getElementById('result-desc').textContent = type.desc;
+      document.getElementById('quiz-result').classList.add('visible');
+      document.getElementById('quiz').scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    function submitQuiz() {
+      const email = document.getElementById('quiz-email').value;
+      if (!email || !email.includes('@')) { alert('Bitte gib eine gültige Email-Adresse ein.'); return; }
+      // PLATZHALTER: Brevo API hier einbinden
+      alert('Danke! Dein Guide ist auf dem Weg. Schau in dein Postfach.');
+    }
+  </script>
+</body>
+</html>
