@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nolvo – Herzschmerz hat eine Neurobiologie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg:         #F6F4F1;
+      --bg-card:    #EDEBE7;
+      --white:      #FFFFFF;
+      --ink:        #0F1A2E;
+      --ink-mid:    #1E3A5F;
+      --ink-dim:    #5A7A9E;
+      --ink-faint:  #B0C4D8;
+      --ink-ghost:  rgba(15,26,46,0.06);
+      --accent:     #484BB3;
+      --accent-mid: #5558C8;
+      --accent-light: rgba(74,111,165,0.08);
+      --border:     rgba(15,26,46,0.1);
+      --border-mid: rgba(15,26,46,0.16);
+      --text:       #1A1A1A;
+      --text-mid:   #4A4A4A;
+      --text-dim:   #888888;
+      --font:       'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --r-sm:       8px;
+      --r:          14px;
+      --r-lg:       24px;
+      --max:        1140px;
+      --ease:       cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 40px; }
+
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+
+    /* ── NAV ── */
+    /* NAV BASE */
+    nav {
+      position: fixed;
+      z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    /* AT TOP: transparent, full width, no shape */
+    nav.at-top {
+      top: 0; left: 0; right: 0;
+      width: 100%;
+      padding: 0 32px;
+      height: 72px;
+      background: transparent;
+      border-radius: 0;
+      border: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      transition: none;
+    }
+
+    /* SCROLLED: pill shape, dark glass */
+    nav.scrolled {
+      top: 12px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 1080px;
+      padding: 0 20px;
+      height: 52px;
+      background: rgba(10,15,24,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.35);
+      transition: top 0.4s ease, width 0.4s ease, padding 0.4s ease,
+                  height 0.4s ease, border-radius 0.4s ease,
+                  background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .nav-logo-svg path { fill: #ffffff; }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; }
+    .nav-logo svg { height: 22px; width: auto; }
+
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.65); transition: color 0.2s; }
+    .nav-link:hover { color: #fff; }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+
+    /* CTA button – always white */
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      font-family: var(--font);
+      font-size: 12px; font-weight: 600;
+      padding: 7px 16px; border-radius: 100px;
+      background: #ffffff; color: #080C14;
+      border: none; cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap; text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.88); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      overflow: hidden;
+      display: flex; align-items: center;
+    }
+
+    /* CSS Gradient background – full hero */
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 65% 0%, #2A4A6B 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 100%, #0D2235 0%, transparent 55%),
+        radial-gradient(ellipse at 0% 60%, #1A3550 0%, transparent 45%),
+        linear-gradient(175deg, #1A3550 0%, #0D1E2E 45%, #060E18 100%);
+    }
+
+    /* Subtle noise texture overlay */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+
+    /* Placeholder box */
+    .hero-person-placeholder {
+      height: 100%; width: 360px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 8px;
+    }
+    .hero-person-placeholder span {
+      font-size: 11px; color: rgba(255,255,255,0.2);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center; line-height: 1.8;
+    }
+
+    /* Left gradient fade so text is readable */
+    .hero-fade {
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to right, rgba(10,18,28,0.85) 0%, rgba(10,18,28,0.5) 45%, transparent 75%),
+        linear-gradient(to top, rgba(6,14,24,0.6) 0%, transparent 30%);
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative; z-index: 3;
+      width: 100%;
+      padding: 100px 0 80px;
+    }
+    .hero-inner {
+      max-width: var(--max); margin: 0 auto; padding: 0 40px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent-mid);
+      flex-shrink: 0;
+    }
+    .hero-h1 {
+      font-size: clamp(40px, 5.5vw, 80px);
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: #fff;
+      max-width: 580px;
+      margin-bottom: 20px;
+    }
+    .hero-h1 span {
+      color: rgba(255,255,255,0.38);
+      font-weight: 300;
+      display: block;
+    }
+    .hero-sub {
+      font-size: 16px; font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      max-width: 420px; line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+    .btn-hero-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent);
+      color: #fff; font-family: var(--font);
+      font-size: 14px; font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 15px 32px; border-radius: 100px; border: none; cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+    .btn-hero-primary:hover {
+      background: var(--accent-mid);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(74,111,165,0.35);
+    }
+    .btn-hero-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.75);
+      font-family: var(--font); font-size: 14px; font-weight: 500;
+      padding: 15px 28px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15); cursor: pointer;
+      transition: all 0.25s var(--ease);
+      backdrop-filter: blur(8px);
+    }
+    .btn-hero-ghost:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.3);
+      color: #fff;
+    }
+
+    /* Trust bar inside hero bottom */
+    .hero-trust {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-trust-item {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .hero-trust-label {
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .hero-trust-value {
+      font-size: 14px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+    }
+    .hero-trust-divider { display: none; }
+    @media (max-width: 600px) {
+      .hero-trust { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    }
+
+    /* ── PROBLEM ── */
+    .problem { padding: 128px 0; background: var(--bg, #F6F4F1); }
+    .problem-grid {
+      display: grid; grid-template-columns: 5fr 7fr;
+      gap: 96px; align-items: start;
+    }
+    .problem-sticky { position: sticky; top: 96px; }
+    .problem-h2 {
+      font-size: clamp(28px, 3.2vw, 44px);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.1;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .problem-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .problem-body { font-size: 15px; color: var(--text-mid); line-height: 1.75; }
+    .problem-items { display: flex; flex-direction: column; gap: 10px; }
+    .problem-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 26px 28px; background: var(--white);
+      border-radius: var(--r); border: 1px solid transparent;
+      transition: all 0.3s var(--ease); cursor: default;
+    }
+    .problem-item:hover {
+      border-color: rgba(74,111,165,0.12);
+      transform: translateX(6px);
+      box-shadow: 0 4px 24px rgba(15,26,46,0.06);
+    }
+    .problem-num { font-size: 12px; font-weight: 700; color: var(--ink-faint); min-width: 22px; padding-top: 3px; }
+    .problem-text strong { display: block; font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 5px; letter-spacing: -0.01em; }
+    .problem-text p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── QUIZ ── */
+    .quiz-section {
+      padding: 128px 0;
+      background: #0F1A2E;
+      position: relative; overflow: hidden;
+    }
+    .quiz-section::before { content: ''; position: absolute; top: -30%; right: -15%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(72,75,179,0.15) 0%, transparent 60%); pointer-events: none; }
+    .quiz-header { text-align: center; margin-bottom: 64px; }
+    .quiz-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 20px; }
+    .quiz-tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent-mid); border-radius: 2px; }
+    .quiz-h2 { font-size: clamp(28px, 4vw, 52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; color: #fff; margin-bottom: 16px; }
+    .quiz-h2 span { color: rgba(255,255,255,0.35); font-weight: 300; }
+    .quiz-sub { font-size: 15px; color: rgba(255,255,255,0.45); max-width: 460px; margin: 0 auto; line-height: 1.7; }
+    .quiz-wrap { max-width: 640px; margin: 0 auto; position: relative; z-index: 2; }
+    .quiz-progress { display: flex; gap: 4px; margin-bottom: 40px; }
+    .quiz-bar { height: 2px; flex: 1; background: rgba(255,255,255,0.1); border-radius: 2px; transition: background 0.4s; }
+    .quiz-bar.active { background: var(--accent-mid); }
+    .quiz-step { display: none; }
+    .quiz-step.visible { display: block; }
+    .quiz-q { font-size: clamp(20px, 2.5vw, 28px); font-weight: 600; letter-spacing: -0.02em; color: #fff; line-height: 1.3; margin-bottom: 28px; }
+    .quiz-opts { display: flex; flex-direction: column; gap: 8px; }
+    .quiz-opt { display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-sm); cursor: pointer; transition: all 0.22s var(--ease); font-family: var(--font); font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.6); text-align: left; width: 100%; }
+    .quiz-opt:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.18); }
+    .quiz-opt.selected { background: rgba(72,75,179,0.15); border-color: var(--accent-mid); color: #fff; }
+    .quiz-letter { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35); flex-shrink: 0; transition: all 0.22s; letter-spacing: 0.05em; }
+    .quiz-opt.selected .quiz-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .quiz-nav { display: flex; justify-content: flex-end; margin-top: 24px; }
+    .btn-quiz-next { background: var(--accent); color: #fff; font-family: var(--font); font-size: 13px; font-weight: 700; letter-spacing: -0.01em; padding: 13px 28px; border-radius: 100px; border: none; cursor: pointer; transition: all 0.25s; opacity: 0.3; pointer-events: none; }
+    .btn-quiz-next.ready { opacity: 1; pointer-events: all; }
+    .btn-quiz-next:hover { background: var(--accent-mid); transform: translateY(-1px); }
+
+    /* ── HAMBURGER + MOBILE MENU ── */
+    .nav-hamburger { display: flex; flex-direction: column; justify-content: center; gap: 5px; cursor: pointer; width: 32px; height: 32px; flex-shrink: 0; }
+    .nav-hamburger span { display: block; width: 20px; height: 1.5px; background: rgba(255,255,255,0.8); border-radius: 2px; transition: all 0.3s ease; }
+    .nav-hamburger:hover span { background: #fff; }
+    .nav-hamburger.open span:first-child { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:last-child { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu { position: fixed; inset: 0; z-index: 300; background: rgba(8,12,20,0.97); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-menu-links { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 40px; }
+    .mobile-menu-link { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 24px; transform: translateY(16px); opacity: 0; transition: color 0.2s, transform 0.35s ease, opacity 0.35s ease; }
+    .mobile-menu.open .mobile-menu-link { transform: translateY(0); opacity: 1; }
+    .mobile-menu.open .mobile-menu-link:nth-child(1) { transition-delay: 0.05s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(2) { transition-delay: 0.1s; }
+    .mobile-menu.open .mobile-menu-link:nth-child(3) { transition-delay: 0.15s; }
+    .mobile-menu-link:hover { color: #fff; }
+    .mobile-menu-cta { display: inline-flex; align-items: center; background: #fff; color: #0C1220; font-family: var(--font); font-size: 15px; font-weight: 700; padding: 15px 36px; border-radius: 100px; text-decoration: none; transform: translateY(16px); opacity: 0; transition: background 0.2s, transform 0.35s ease, opacity 0.35s ease; transition-delay: 0.2s; }
+    .mobile-menu.open .mobile-menu-cta { transform: translateY(0); opacity: 1; }
+    .mobile-menu-cta:hover { background: rgba(255,255,255,0.88); }
+
+    /* ── DARK MODE ──
+       Quiz + Result keep dark bg always (dark navy by design)
+       Light sections (hero excluded) adapt to system theme
+    ── */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:         #111318;
+        --bg-card:    #181B22;
+        --white:      #1E2128;
+        --ink:        #0F1A2E;
+        --text:       #E4E6EC;
+        --text-mid:   #9AA3B2;
+        --text-dim:   #5A6370;
+        --border:     rgba(255,255,255,0.07);
+        --border-mid: rgba(255,255,255,0.12);
+        --accent:     #6B7FD4;
+        --accent-mid: #8494E0;
+      }
+      body { background: #111318; color: #E4E6EC; }
+
+      /* Nav */
+      nav.scrolled { background: rgba(17,19,24,0.92) !important; }
+
+      /* Problem items */
+      .problem-item { background: #1E2128; }
+      .problem-item:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+
+      /* How cards */
+      .how-card { background: #1E2128; }
+
+      /* Science */
+      .science { background: #181B22; }
+      .sci-quote { background: #1E2128; }
+      .stat-card { background: #1E2128; }
+
+      /* Waitlist */
+      .waitlist-input { background: #1E2128; color: #E4E6EC; border-color: rgba(255,255,255,0.1); }
+      .waitlist-input::placeholder { color: #5A6370; }
+
+      /* Footer */
+      footer { border-top-color: rgba(255,255,255,0.07); }
+      .footer-logo svg path { fill: #E4E6EC !important; }
+
+      /* Types section */
+      .types-section { background: #111318; }
+      .type-card { background: #1E2128; }
+      .family-header-bar { /* keep colored - already has bg color inline */ }
+
+      /* Tags */
+      .tag { color: var(--accent); }
+      .tag::before { background: var(--accent); }
+    }
+
+
+    /* ── QUIZ RESULT ── */
+    .quiz-result { display: none; }
+    .quiz-result.visible { display: block; }
+
+    .result-header {
+      text-align: center; padding: 48px 0 40px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 40px;
+    }
+    .result-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: #fff; padding: 6px 18px; border-radius: 100px; margin-bottom: 4px;
+    }
+    .result-code { font-size: 14px; font-weight: 800; letter-spacing: 0.28em; color: rgba(255,255,255,0.4); }
+    .result-type { font-size: clamp(32px, 5vw, 52px); font-weight: 700; letter-spacing: -0.03em; color: #fff; line-height: 1.05; margin: 4px 0; }
+    .result-family { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+
+    .result-img-wrap {
+      width: 100%; max-width: 400px; height: 400px;
+      border-radius: var(--r-lg); overflow: hidden;
+      margin: 0 auto 56px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .result-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+    .result-desc { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.75; text-align: left; margin: 0 0 8px; }
+
+    .result-intro-text {
+      margin: 72px 0 12px;
+      padding: 24px;
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--r) var(--r) 0;
+    }
+    .result-section-title { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: 10px; line-height: 1.3; }
+    .result-intro-body { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; margin: 0; }
+
+    .result-axes { margin: 72px 0 40px; }
+    .result-axes-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; margin-bottom: 20px; }
+    .result-axes-list { display: flex; flex-direction: column; gap: 16px; }
+    .result-axis { display: flex; flex-direction: column; gap: 8px; }
+    .result-axis-labels { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.5); }
+    .result-axis-label-active { color: #fff; font-weight: 700; }
+    .result-axis-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 100px; position: relative; overflow: visible; }
+    .result-axis-fill { height: 100%; border-radius: 100px; transition: width 1s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .result-axis-thumb { width: 16px; height: 16px; border-radius: 50%; background: #fff; position: absolute; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: left 1s cubic-bezier(0.25,0.46,0.45,0.94); }
+
+    .result-insight { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--r); padding: 28px; margin: 72px 0; }
+    .result-insight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .result-insight-item h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    .result-insight-item p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+    .result-insight-strength h4 { color: #4CAF50; }
+    .result-insight-risk h4 { color: #FF6B6B; }
+
+    .result-timeline { margin: 72px 0; }
+    .result-timeline-steps { display: flex; flex-direction: column; gap: 0; margin-top: 20px; position: relative; }
+    .result-timeline-steps::before { content: ''; position: absolute; left: 20px; top: 24px; bottom: 24px; width: 1px; background: rgba(255,255,255,0.1); }
+    .result-tl-step { display: flex; gap: 20px; align-items: flex-start; padding: 0 0 32px 0; position: relative; }
+    .result-tl-step:last-child { padding-bottom: 0; }
+    .result-tl-dot { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; position: relative; z-index: 1; border: 2px solid rgba(255,255,255,0.1); }
+    .result-tl-dot.active { border-color: rgba(255,255,255,0.8); box-shadow: 0 0 16px rgba(255,255,255,0.15); }
+    .result-tl-content { padding-top: 6px; }
+    .result-tl-phase { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 4px; }
+    .result-tl-title { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .result-tl-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+    .result-families { margin-top: 72px; }
+    .result-families-title { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; margin-bottom: 16px; }
+    .result-families-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .result-family-card { border-radius: var(--r-sm); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); transition: all 0.25s; opacity: 0.55; }
+    .result-family-card.is-mine { opacity: 1; border: 2px solid rgba(255,255,255,0.35); box-shadow: 0 0 24px rgba(255,255,255,0.08); }
+    .result-family-card:hover { opacity: 1; transform: translateY(-2px); }
+    .result-family-header { padding: 10px 12px; font-size: 11px; font-weight: 700; color: #fff; }
+    .result-family-types { background: rgba(0,0,0,0.3); padding: 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+    .result-family-type { display: flex; align-items: center; gap: 7px; font-size: 11px; color: rgba(255,255,255,0.5); }
+    .result-family-type.is-mine { color: #fff; font-weight: 700; }
+    .result-family-type-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25); flex-shrink: 0; }
+    .result-family-type.is-mine .result-family-type-dot { background: #fff; }
+    .result-mine-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 100px; color: #fff; margin-left: auto; white-space: nowrap; }
+
+    .result-email-block { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--r); padding: 28px; margin-top: 72px; margin-bottom: 40px; }
+    .result-email-title { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); margin-bottom: 14px; }
+    .result-email-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .result-input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: var(--r-sm); color: #fff; font-family: var(--font); font-size: 15px; padding: 16px 20px; outline: none; transition: border 0.25s; }
+    .result-input::placeholder { color: rgba(255,255,255,0.25); }
+    .result-input:focus { border-color: rgba(255,255,255,0.4); }
+    .result-note { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+    .result-traits { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; justify-content: center; }
+    .result-trait { font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 100px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.12); }
+
+    .btn-ghost-white { display: inline-flex; align-items: center; background: transparent; color: rgba(255,255,255,0.6); font-family: var(--font); font-size: 14px; font-weight: 500; padding: 14px 28px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.25s; cursor: pointer; text-decoration: none; }
+    .btn-ghost-white:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+    @media (max-width: 640px) {
+      .result-img-wrap { height: 280px; }
+      .result-families-grid { grid-template-columns: repeat(2, 1fr); }
+      .result-email-row { flex-direction: column; }
+      .result-insight-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── HOW ── */
+    .how { padding: 128px 0; background: var(--bg); }
+    .how-header { margin-bottom: 64px; }
+    .how-h2 { font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 12px; }
+    .how-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .how-sub { font-size: 15px; color: var(--text-dim); max-width: 460px; line-height: 1.7; }
+    .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .how-card { background: var(--white); border-radius: var(--r); padding: 30px 26px; border: 1px solid var(--border); transition: all 0.3s var(--ease); }
+    .how-card:hover { border-color: rgba(72,75,179,0.2); box-shadow: 0 8px 32px rgba(15,26,46,0.07); transform: translateY(-4px); }
+    .how-num { font-size: 12px; font-weight: 700; color: var(--ink-faint); letter-spacing: 0.06em; margin-bottom: 20px; }
+    .how-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 14px; }
+    .how-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .how-text { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── SCIENCE ── */
+    .science { padding: 128px 0; background: var(--bg-card); }
+    .science-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: center; }
+    .science-h2 { font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 18px; }
+    .science-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .science-body { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 32px; }
+    .science-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .stat-card { background: var(--white); border-radius: var(--r); padding: 22px; border: 1px solid var(--border); transition: all 0.25s; }
+    .stat-card:hover { box-shadow: 0 4px 20px rgba(15,26,46,0.07); }
+    .stat-num { font-size: 36px; font-weight: 700; color: var(--accent); letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+    .science-quotes { display: flex; flex-direction: column; gap: 14px; }
+    .sci-quote { background: var(--white); border-radius: var(--r); padding: 26px; border: 1px solid var(--border); border-left: 3px solid var(--accent); transition: all 0.25s; }
+    .sci-quote:hover { box-shadow: 0 4px 20px rgba(15,26,46,0.07); }
+    .sci-quote-text { font-size: 15px; font-weight: 400; color: var(--ink); line-height: 1.6; margin-bottom: 10px; font-style: italic; }
+    .sci-quote-src { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* ── WAITLIST ── */
+    .waitlist { padding: 140px 0; text-align: center; position: relative; overflow: hidden; background: var(--bg); }
+    .waitlist::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 800px; height: 500px; background: radial-gradient(ellipse at 50% 0%, rgba(72,75,179,0.07) 0%, transparent 65%); pointer-events: none; }
+    .waitlist-h2 { font-size: clamp(32px, 5vw, 62px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; color: var(--ink); max-width: 600px; margin: 0 auto 18px; }
+    .waitlist-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .waitlist-sub { font-size: 16px; color: var(--text-dim); max-width: 400px; margin: 0 auto 44px; line-height: 1.7; }
+    .waitlist-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; }
+    .waitlist-input { flex: 1; background: var(--white); border: 1.5px solid var(--border-mid); border-radius: 100px; color: var(--text); font-family: var(--font); font-size: 14px; padding: 14px 22px; outline: none; transition: border 0.25s; }
+    .waitlist-input::placeholder { color: var(--text-dim); }
+    .waitlist-input:focus { border-color: var(--accent); }
+    .btn-primary { display: inline-flex; align-items: center; background: var(--accent); color: #fff; font-family: var(--font); font-size: 14px; font-weight: 600; letter-spacing: -0.01em; padding: 14px 28px; border-radius: 100px; border: none; cursor: pointer; transition: all 0.25s var(--ease); white-space: nowrap; }
+    .btn-primary:hover { background: var(--accent-mid); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(72,75,179,0.3); }
+    .waitlist-note { font-size: 12px; color: var(--text-dim); }
+
+    /* ── FOOTER ── */
+    footer { padding: 36px 0; border-top: 1px solid var(--border); background: var(--bg); }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; }
+    .footer-logo svg { height: 22px; width: auto; }
+    .footer-logo svg path { fill: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--text-dim); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-link { font-size: 12px; color: var(--text-dim); transition: color 0.2s; }
+    .footer-link:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(22px); } to { opacity:1; transform:translateY(0); } }
+    .hero-eyebrow { animation: fadeUp 0.8s var(--ease) both 0.15s; }
+    .hero-h1      { animation: fadeUp 0.8s var(--ease) both 0.28s; }
+    .hero-sub     { animation: fadeUp 0.8s var(--ease) both 0.4s; }
+    .hero-actions { animation: fadeUp 0.8s var(--ease) both 0.52s; }
+    .hero-trust   { animation: fadeUp 0.8s var(--ease) both 0.64s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .problem-grid { grid-template-columns: 1fr; gap: 40px; }
+      .problem-sticky { position: static; }
+      .science-grid { grid-template-columns: 1fr; gap: 48px; }
+      .how-grid { grid-template-columns: 1fr 1fr; }
+      .waitlist-form { flex-direction: column; }
+      .waitlist-input { border-radius: var(--r-sm); }
+      .btn-primary { border-radius: var(--r-sm); }
+      nav.at-top { padding: 0 20px; height: 64px; }
+      nav.scrolled { width: calc(100% - 24px); padding: 0 16px; height: 52px; }
+      .nav-links { display: none; }
+      .container { padding: 0 24px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .science-stats { grid-template-columns: 1fr 1fr; }
+      .hero-h1 { font-size: 38px; }
+    }
+
+    /* ── DARK MODE ── */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:         #111318;
+        --bg-card:    #181B22;
+        --white:      #1E2128;
+        --text:       #E4E6EC;
+        --text-mid:   #9AA3B2;
+        --text-dim:   #5A6370;
+        --border:     rgba(255,255,255,0.07);
+        --border-mid: rgba(255,255,255,0.12);
+        --ink:        #E4E6EC;
+        --ink-mid:    #9AA3B2;
+        --ink-dim:    #5A6370;
+        --ink-faint:  #3A4A5E;
+        --accent:     #6B7FD4;
+        --accent-mid: #8494E0;
+      }
+      body { background: #111318; }
+      nav.scrolled { background: rgba(17,19,24,0.92) !important; }
+      .problem-item { background: #1E2128; }
+      .how-card { background: #1E2128; }
+      .science { background: #181B22; }
+      .sci-quote { background: #1E2128; }
+      .stat-card { background: #1E2128; }
+      .waitlist { background: #111318; }
+      .waitlist-input { background: #1E2128; color: #E4E6EC; border-color: rgba(255,255,255,0.1); }
+      .waitlist-input::placeholder { color: #5A6370; }
+      footer { background: #111318; }
+      .footer-logo svg path { fill: #E4E6EC !important; }
+      .types-section { background: #111318; }
+      .type-card { background: #1E2128; }
+      .how { background: #111318; }
+    }
+
+    /* ── TYPEN ÜBERSICHT ── */
+    .types-section { padding: 128px 0; }
+    .types-header { text-align: center; margin-bottom: 72px; }
+    .types-h2 { font-size: clamp(30px, 3.5vw, 48px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 12px; }
+    .types-h2 span { color: var(--ink-dim); font-weight: 300; }
+    .types-sub { font-size: 15px; color: var(--text-dim); max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+    .family-block { margin-bottom: 64px; border-radius: var(--r-lg); overflow: hidden; }
+    .family-header-bar {
+      padding: 20px 28px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .family-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-bottom: 4px; }
+    .family-title {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.95);
+    }
+    .family-subtitle {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      letter-spacing: 0.04em;
+    }
+
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.06);
+    }
+    .type-card {
+      background: var(--white);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex; flex-direction: column;
+    }
+    .type-img-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    .type-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+    .type-card-body { padding: 16px; flex: 1; }
+    .type-code {
+      display: inline-block;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.14em;
+      padding: 3px 10px; border-radius: 100px;
+      margin-bottom: 10px;
+    }
+    .type-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 10px; letter-spacing: -0.01em; line-height: 1.3; }
+    .type-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+    .type-bullets li {
+      font-size: 12px; color: var(--text-dim); line-height: 1.4;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .type-bullets li::before {
+      content: '·'; font-weight: 700; font-size: 14px; line-height: 1.2; flex-shrink: 0;
+    }
+
+    @media (max-width: 960px) { .types-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 500px) { .types-grid { grid-template-columns: repeat(2, 1fr); gap: 1px; } .type-name { font-size: 13px; } }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="at-top" id="navbar">
+    <div class="nav-logo">
+      <svg class="nav-logo-svg" viewBox="0 0 111.31038 87.800797" xmlns="http://www.w3.org/2000/svg">
+        <path style="fill:#ffffff;stroke-width:0" d="m 60.34792,222.74738 v 84.45135 h 28.455017 l 41.067043,-53.30931 c 4.50083,-4.64165 5.72823,-4.25274 7.60189,-4.35336 0.69599,-0.0374 3.89641,0.12149 5.01043,4.43669 l 2.54166,53.09712 h 26.63435 v -57.3935 c -1.76594,-16.63396 -35.12463,-58.89639 -73.539113,0 L 87.39475,263.81851 v -40.89435 z" transform="translate(-60.347921,-219.39793)" />
+      </svg>
+    </div>
+    <div class="nav-links">
+      <a href="#how" class="nav-link">Wie es funktioniert</a>
+      <a href="#science" class="nav-link">Wissenschaft</a>
+    </div>
+    <div class="nav-right">
+      <a href="#quiz" class="nav-cta">Quiz starten</a>
+      <div class="nav-hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <!-- Synapsen-Feuer Canvas – nur auf Mobile sichtbar -->
+    <canvas id="synapseCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;display:none;"></canvas>
+    <div class="hero-fade"></div>
+
+
+
+    <div class="hero-content">
+      <div class="hero-inner">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-dot"></div>
+          Basiert auf Neurobiologie
+        </div>
+        <h1 class="hero-h1">
+          Herzschmerz hat eine Wissen&shy;schaft.
+          <span>Kein Drama.</span>
+        </h1>
+        <p class="hero-sub">
+          Für Männer die verstehen wollen was wirklich passiert – und was tatsächlich hilft.
+        </p>
+        <div class="hero-actions">
+          <a href="#quiz" class="btn-hero-primary">Gratis Quiz starten →</a>
+          <a href="#how" class="btn-hero-ghost">Wie es funktioniert</a>
+        </div>
+        <div class="hero-trust">
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Basiert auf</div>
+            <div class="hero-trust-value">Wissenschaft</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Gemacht für</div>
+            <div class="hero-trust-value">Männer</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Kein</div>
+            <div class="hero-trust-value">Therapie-Ersatz</div>
+          </div>
+          <div class="hero-trust-divider"></div>
+          <div class="hero-trust-item">
+            <div class="hero-trust-label">Komplett</div>
+            <div class="hero-trust-value">Kostenlos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="container">
+      <div class="problem-grid">
+        <div class="problem-sticky">
+          <div class="tag">Das Problem</div>
+          <h2 class="problem-h2">Du funktionierst.<br><span>Aber irgendwas stimmt nicht.</span></h2>
+          <p class="problem-body">Männer nach Trennungen verdrängen, ablenken, funktionieren. Nicht weil sie schwach sind – sondern weil es dafür kaum etwas gibt das wirklich passt.</p>
+        </div>
+        <div class="problem-items">
+          <div class="problem-item">
+            <div class="problem-num">01</div>
+            <div class="problem-text">
+              <strong>Du schläfst nicht</strong>
+              <p>Cortisol hält dich wach. Das ist keine Einbildung – das ist messbare Physiologie nach sozialem Verlust.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">02</div>
+            <div class="problem-text">
+              <strong>Du checkst ihr Profil</strong>
+              <p>Variable Belohnungsschleifen. Dein Gehirn sucht Dopamin. Es ist neurobiologisch wie eine Sucht.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">03</div>
+            <div class="problem-text">
+              <strong>Du redest mit niemandem</strong>
+              <p>Nicht weil du nichts zu sagen hättest. Sondern weil du keine Struktur hast wie du anfangen sollst.</p>
+            </div>
+          </div>
+          <div class="problem-item">
+            <div class="problem-num">04</div>
+            <div class="problem-text">
+              <strong>Du weisst nicht wo du stehst</strong>
+              <p>Wie lange dauert das noch? Ist das normal? Was kommt als nächstes? Keine Antworten, nirgendwo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="quiz-section" id="quiz">
+    <div class="container">
+      <div class="quiz-header">
+        <div class="quiz-tag">Dein persönlicher Plan</div>
+        <h2 class="quiz-h2">Finde heraus in welcher<br><span>Phase du bist</span></h2>
+        <p class="quiz-sub">8 Fragen. Dein persönliches Ergebnis – kostenlos per Email.</p>
+      </div>
+      <div class="quiz-wrap">
+        <div class="quiz-progress">
+          <div class="quiz-bar active" id="pb1"></div>
+          <div class="quiz-bar" id="pb2"></div>
+          <div class="quiz-bar" id="pb3"></div>
+          <div class="quiz-bar" id="pb4"></div>
+          <div class="quiz-bar" id="pb5"></div>
+          <div class="quiz-bar" id="pb6"></div>
+          <div class="quiz-bar" id="pb7"></div>
+          <div class="quiz-bar" id="pb8"></div>
+        </div>
+
+        <!-- Frage 1 -->
+        <div class="quiz-step visible" id="step1">
+          <p class="quiz-q">Es ist spät abends. Du liegst im Bett. Was passiert?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="1" data-v="a"><span class="quiz-letter">A</span>Der Schmerz kommt hoch – ich lasse ihn zu, auch wenn es wehtut</button>
+            <button class="quiz-opt" data-q="1" data-v="b"><span class="quiz-letter">B</span>Mein Kopf dreht Loops – ich analysiere alles immer wieder durch</button>
+            <button class="quiz-opt" data-q="1" data-v="c"><span class="quiz-letter">C</span>Ich greife zum Handy – Hauptsache nicht mit den Gedanken allein</button>
+            <button class="quiz-opt" data-q="1" data-v="d"><span class="quiz-letter">D</span>Nichts – eine seltsame Taubheit, ich fühle weniger als ich sollte</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next1" onclick="nextStep(1)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 2 -->
+        <div class="quiz-step" id="step2">
+          <p class="quiz-q">Dein engster Freund fragt wie es dir wirklich geht. Was passiert?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="2" data-v="a"><span class="quiz-letter">A</span>Ich rede – ich brauche das, es hilft mir zu verstehen was ich fühle</button>
+            <button class="quiz-opt" data-q="2" data-v="b"><span class="quiz-letter">B</span>Ich sage «passt» und wechsle das Thema – ich will es nicht besprechen</button>
+            <button class="quiz-opt" data-q="2" data-v="c"><span class="quiz-letter">C</span>Ich erkläre alles haargenau – aber fühle mich danach genauso verloren</button>
+            <button class="quiz-opt" data-q="2" data-v="d"><span class="quiz-letter">D</span>Ich weiche aus – nicht weil ich nicht will, sondern weil ich nicht weiss wie</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next2" onclick="nextStep(2)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 3 -->
+        <div class="quiz-step" id="step3">
+          <p class="quiz-q">Du findest zufällig ein altes Foto von euch. Was tust du?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="3" data-v="a"><span class="quiz-letter">A</span>Ich schaue es lange an – ich will diesen Moment nicht loslassen</button>
+            <button class="quiz-opt" data-q="3" data-v="b"><span class="quiz-letter">B</span>Ich lege es weg oder lösche es – kein Kontakt mit der Vergangenheit</button>
+            <button class="quiz-opt" data-q="3" data-v="c"><span class="quiz-letter">C</span>Ich schaue kurz – dann versuche ich es zu verdrängen und weiterzumachen</button>
+            <button class="quiz-opt" data-q="3" data-v="d"><span class="quiz-letter">D</span>Ich idealisiere sofort – in meiner Erinnerung war alles perfekt</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next3" onclick="nextStep(3)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 4 -->
+        <div class="quiz-step" id="step4">
+          <p class="quiz-q">Wenn du an nächsten Monat denkst – was ist dein erster Impuls?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="4" data-v="a"><span class="quiz-letter">A</span>Ich brauche einen Plan – Ziele, Routinen, konkrete Schritte</button>
+            <button class="quiz-opt" data-q="4" data-v="b"><span class="quiz-letter">B</span>Ich nehme es wie es kommt – kein Druck, keine Erwartungen</button>
+            <button class="quiz-opt" data-q="4" data-v="c"><span class="quiz-letter">C</span>Ich kann nicht vorausdenken – ich stecke noch zu sehr in der Gegenwart</button>
+            <button class="quiz-opt" data-q="4" data-v="d"><span class="quiz-letter">D</span>Ich hoffe dass es von selbst besser wird – Zeit heilt alles</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next4" onclick="nextStep(4)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 5 -->
+        <div class="quiz-step" id="step5">
+          <p class="quiz-q">Was ist dein dominanter Gedanke wenn du an sie denkst?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="5" data-v="a"><span class="quiz-letter">A</span>Schmerz und Sehnsucht – ich vermisse sie körperlich</button>
+            <button class="quiz-opt" data-q="5" data-v="b"><span class="quiz-letter">B</span>Fragen ohne Antworten – warum, wie, was hätte ich anders gemacht</button>
+            <button class="quiz-opt" data-q="5" data-v="c"><span class="quiz-letter">C</span>Wut – auf sie, auf mich, auf die ganze Situation</button>
+            <button class="quiz-opt" data-q="5" data-v="d"><span class="quiz-letter">D</span>Eigentlich nichts – ich versuche gar nicht daran zu denken</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next5" onclick="nextStep(5)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 6 -->
+        <div class="quiz-step" id="step6">
+          <p class="quiz-q">Was hast du in letzter Zeit deutlich mehr gemacht als vorher?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="6" data-v="a"><span class="quiz-letter">A</span>Mit Menschen treffen, reden, nicht allein sein wollen</button>
+            <button class="quiz-opt" data-q="6" data-v="b"><span class="quiz-letter">B</span>Trainieren, arbeiten, beschäftigt sein – Körper und Kopf ausfüllen</button>
+            <button class="quiz-opt" data-q="6" data-v="c"><span class="quiz-letter">C</span>Ihr schreiben, ihr Profil checken, Orte aufsuchen die euch verbinden</button>
+            <button class="quiz-opt" data-q="6" data-v="d"><span class="quiz-letter">D</span>Mich zurückziehen – ich bin lieber allein als unter Menschen</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next6" onclick="nextStep(6)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 7 -->
+        <div class="quiz-step" id="step7">
+          <p class="quiz-q">Wie denkst du über die Beziehung wenn du ehrlich bist?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="7" data-v="a"><span class="quiz-letter">A</span>Es war das Beste was mir passiert ist – ich will es zurück</button>
+            <button class="quiz-opt" data-q="7" data-v="b"><span class="quiz-letter">B</span>Es war richtig dass es endet – auch wenn es wehtut</button>
+            <button class="quiz-opt" data-q="7" data-v="c"><span class="quiz-letter">C</span>Ich weiss es nicht mehr – je länger ich nachdenke desto verwirrter werde ich</button>
+            <button class="quiz-opt" data-q="7" data-v="d"><span class="quiz-letter">D</span>Ich denke nicht daran – ich habe einen Schlussstrich gezogen</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next7" onclick="nextStep(7)">Weiter →</button></div>
+        </div>
+
+        <!-- Frage 8 -->
+        <div class="quiz-step" id="step8">
+          <p class="quiz-q">Was würde dir jetzt gerade am meisten helfen?</p>
+          <div class="quiz-opts">
+            <button class="quiz-opt" data-q="8" data-v="a"><span class="quiz-letter">A</span>Ein klarer Plan – zu wissen was ich als nächstes tun soll</button>
+            <button class="quiz-opt" data-q="8" data-v="b"><span class="quiz-letter">B</span>Verstehen was in mir vorgeht – eine Erklärung für mein Verhalten</button>
+            <button class="quiz-opt" data-q="8" data-v="c"><span class="quiz-letter">C</span>Einfach aufhören an sie zu denken – Ruhe im Kopf</button>
+            <button class="quiz-opt" data-q="8" data-v="d"><span class="quiz-letter">D</span>Jemand der sagt dass es okay ist – dass ich nicht falsch liege</button>
+          </div>
+          <div class="quiz-nav"><button class="btn-quiz-next" id="next8" onclick="showResult()">Ergebnis anzeigen →</button></div>
+        </div>
+
+                <!-- Ergebnis -->
+        <div class="quiz-result" id="quiz-result">
+
+          <!-- 1. HEADER: Badge + Code + Name + Familie -->
+          <div class="result-header">
+            <div class="result-badge" id="result-badge">Dein Typ</div>
+            <div class="result-code" id="result-code"></div>
+            <h3 class="result-type" id="result-type"></h3>
+            <p class="result-family" id="result-family"></p>
+          </div>
+
+          <!-- 2. BILD gross -->
+          <div class="result-img-wrap" id="result-img-wrap">
+            <img id="result-img" src="" alt="" />
+          </div>
+
+          <!-- 3. BESCHREIBUNG -->
+          <p class="result-desc" id="result-desc"></p>
+
+          <!-- 3b. INTRO TEXT -->
+          <div class="result-intro-text">
+            <div class="result-section-title" id="result-intro-title"></div>
+            <p class="result-intro-body" id="result-intro-body"></p>
+          </div>
+
+          <!-- 4. SLIDER: Die 4 Achsen -->
+          <div class="result-axes">
+            <div class="result-axes-title">Deine 4 Bewältigungsachsen</div>
+            <div class="result-axes-list" id="result-axes-list">
+              <!-- JS fills -->
+            </div>
+          </div>
+
+          <!-- 5. TEXT: Deine Stärke & Risiko -->
+          <div class="result-insight" id="result-insight">
+            <!-- JS fills -->
+          </div>
+
+          <!-- 6. TIMELINE -->
+          <div class="result-timeline">
+            <div class="result-axes-title">Deine Heilungs-Timeline</div>
+            <div class="result-timeline-steps" id="result-timeline-steps">
+              <!-- JS fills -->
+            </div>
+          </div>
+
+          <!-- 7. FAMILIEN VERGLEICH -->
+          <div class="result-families">
+            <div class="result-families-title">Dein Typ im Vergleich</div>
+            <div class="result-families-grid" id="result-families-grid">
+              <!-- JS fills -->
+            </div>
+          </div>
+
+          <!-- 8. EMAIL CTA -->
+          <div class="result-email-block">
+            <div class="result-email-title">Dein persönlicher 5-Tage-Guide kommt per Email</div>
+            <div class="result-email-row">
+              <input type="email" class="result-input" placeholder="deine@email.de" id="quiz-email" />
+              <button class="btn-primary" onclick="submitQuiz()" style="border-radius:var(--r-sm);white-space:nowrap;">Guide erhalten →</button>
+            </div>
+            <p class="result-note">Kein Spam. Du wirst informiert wenn Nolvo live geht.</p>
+          </div>
+
+          <!-- 9. BUTTON zu allen Typen -->
+          <div style="margin-top:32px;">
+            <a href="#types" class="btn-ghost-white" style="display:flex;justify-content:center;width:100%;box-sizing:border-box;">Alle 16 Typen entdecken →</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="container">
+      <div class="how-header">
+        <div class="tag">So funktioniert es</div>
+        <h2 class="how-h2">Vier Schritte.<br><span>Ein klarer Weg.</span></h2>
+        <p class="how-sub">Kein Programm das ewig dauert. Konkrete Schritte die du sofort machen kannst.</p>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">01</div>
+          <div class="how-icon">🧠</div>
+          <div class="how-title">Quiz machen</div>
+          <div class="how-text">5 Fragen. Keine Diagnose. Nur Klarheit darüber wo du gerade stehst.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">02</div>
+          <div class="how-icon">🎯</div>
+          <div class="how-title">Typ erhalten</div>
+          <div class="how-text">Dein persönliches Ergebnis zeigt welches Muster du gerade lebst – und warum.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">03</div>
+          <div class="how-icon">📩</div>
+          <div class="how-title">5-Tage-Guide</div>
+          <div class="how-text">Täglich eine Email. Konkret, direkt, auf deinen Typ zugeschnitten.</div>
+        </div>
+        <div class="how-card">
+          <div class="how-num">04</div>
+          <div class="how-icon">⚡</div>
+          <div class="how-title">Nolvo App</div>
+          <div class="how-text">Wir bauen das weiter. Du erfährst es als Erster wenn es fertig ist.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCIENCE -->
+  <section class="science" id="science">
+    <div class="container">
+      <div class="science-grid">
+        <div>
+          <div class="tag">Basiert auf Forschung</div>
+          <h2 class="science-h2">Kein Bauchgefühl.<br><span>Neurobiologie.</span></h2>
+          <p class="science-body">Liebesschmerz aktiviert dieselben Hirnareale wie Kokainentzug – messbar im fMRI-Scanner. Das erklärt warum du dich so verhältst wie du dich verhältst.</p>
+          <div class="science-stats">
+            <div class="stat-card"><div class="stat-num">83%</div><div class="stat-label">berichten nach aktiver Verarbeitung von persönlichem Wachstum</div></div>
+            <div class="stat-card"><div class="stat-num">72h</div><div class="stat-label">neurobiologischer Peak-Schmerz nach Trennung</div></div>
+            <div class="stat-card"><div class="stat-num">21d</div><div class="stat-label">bis Gedankenmuster unterbrochen werden können</div></div>
+            <div class="stat-card"><div class="stat-num">30%</div><div class="stat-label">Cortisolanstieg nach sozialem Verlust – messbar</div></div>
+          </div>
+        </div>
+        <div class="science-quotes">
+          <div class="sci-quote">
+            <p class="sci-quote-text">«Sozialer Schmerz aktiviert identische Hirnregionen wie physischer Schmerz.»</p>
+            <div class="sci-quote-src">Kross et al., PNAS 2011</div>
+          </div>
+          <div class="sci-quote">
+            <p class="sci-quote-text">«Liebesschmerz und Kokain-Entzug sind neurobiologisch nicht zu unterscheiden.»</p>
+            <div class="sci-quote-src">Fisher et al., Rutgers University 2010</div>
+          </div>
+          <div class="sci-quote">
+            <p class="sci-quote-text">«83% der Menschen berichten nach aktiver Verarbeitung von persönlichem Wachstum.»</p>
+            <div class="sci-quote-src">Tashiro & Frazier, 2003</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPEN ÜBERSICHT -->
+  <section class="types-section" id="types">
+    <div class="container">
+      <div class="types-header">
+        <div class="tag">Dein Bewältigungsprofil</div>
+        <h2 class="types-h2">16 Typen.<br><span>Einer ist deiner.</span></h2>
+        <p class="types-sub">Basierend auf 4 Achsen die beschreiben wie du heilst – nicht was dir passiert ist. Mach das Quiz und finde deinen Typ.</p>
+      </div>
+
+      <!-- Familie 1: Herz + Wir -->
+      <div class="family-block">
+        <div class="family-header-bar" style="background:#C15134">
+          
+          <span class="family-title">Die Herzensoffenen</span>
+          <span class="family-subtitle">Herz + Wir · Fühlt mit anderen</span>
+        </div>
+        <div class="types-grid">
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FAEAE5">
+              <img src="HWBP.png" alt="Der Bewahrende Verbündete" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(193,81,52,0.12);color:#C15134">HWBP</div>
+              <div class="type-name">Der Bewahrende Verbündete</div>
+              <ul class="type-bullets" style="--bc:#C15134">
+                <li style="color:#C15134">Hält fest &amp; braucht Struktur</li>
+                <li>Heilt in Gemeinschaft</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FAEAE5">
+              <img src="HWBF.png" alt="Der Treue Begleiter" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(193,81,52,0.12);color:#C15134">HWBF</div>
+              <div class="type-name">Der Treue Begleiter</div>
+              <ul class="type-bullets">
+                <li style="color:#C15134">Hält fest, lässt Zeit arbeiten</li>
+                <li>Heilt mit anderen</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FAEAE5">
+              <img src="HWSP.png" alt="Der Entschlossene" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(193,81,52,0.12);color:#C15134">HWSP</div>
+              <div class="type-name">Der Entschlossene</div>
+              <ul class="type-bullets">
+                <li style="color:#C15134">Macht Schluss, braucht Plan</li>
+                <li>Heilt mit Menschen</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FAEAE5">
+              <img src="HWSF.png" alt="Der Loslasser" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(193,81,52,0.12);color:#C15134">HWSF</div>
+              <div class="type-name">Der Loslasser</div>
+              <ul class="type-bullets">
+                <li style="color:#C15134">Macht Schluss, lässt fliessen</li>
+                <li>Heilt offen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Familie 2: Herz + Ich -->
+      <div class="family-block">
+        <div class="family-header-bar" style="background:#ED9D0A">
+          
+          <span class="family-title">Die Tiefgründigen</span>
+          <span class="family-subtitle">Herz + Ich · Fühlt alleine</span>
+        </div>
+        <div class="types-grid">
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FEF6E4">
+              <img src="HIBP.png" alt="Der Stille Bewahrer" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(237,157,10,0.12);color:#ED9D0A">HIBP</div>
+              <div class="type-name">Der Stille Bewahrer</div>
+              <ul class="type-bullets">
+                <li style="color:#ED9D0A">Fühlt tief, hält fest</li>
+                <li>Braucht Struktur</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FEF6E4">
+              <img src="HIBF.png" alt="Der Melancholiker" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(237,157,10,0.12);color:#ED9D0A">HIBF</div>
+              <div class="type-name">Der Melancholiker</div>
+              <ul class="type-bullets">
+                <li style="color:#ED9D0A">Fühlt tief, hält fest</li>
+                <li>Lässt Zeit arbeiten</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FEF6E4">
+              <img src="HISP.png" alt="Der Stille Entschlossene" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(237,157,10,0.12);color:#ED9D0A">HISP</div>
+              <div class="type-name">Der Stille Entschlossene</div>
+              <ul class="type-bullets">
+                <li style="color:#ED9D0A">Fühlt, macht Schluss</li>
+                <li>Braucht Plan</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#FEF6E4">
+              <img src="HISF.png" alt="Der Einsiedler" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(237,157,10,0.12);color:#ED9D0A">HISF</div>
+              <div class="type-name">Der Einsiedler</div>
+              <ul class="type-bullets">
+                <li style="color:#ED9D0A">Fühlt, macht Schluss</li>
+                <li>Lässt fliessen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            <!-- Familie 3: Kopf + Wir -->
+      <div class="family-block">
+        <div class="family-header-bar" style="background:#04746F">
+          
+          <span class="family-title">Die Besprecher</span>
+          <span class="family-subtitle">Kopf + Wir · Denkt mit anderen</span>
+        </div>
+        <div class="types-grid">
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#E4F4F3">
+              <img src="KWBP.png" alt="Der Stratege" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(4,116,111,0.12);color:#04746F">KWBP</div>
+              <div class="type-name">Der Stratege</div>
+              <ul class="type-bullets">
+                <li style="color:#04746F">Analysiert, hält fest</li>
+                <li>Braucht Plan</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#E4F4F3">
+              <img src="KWBF.png" alt="Der Grübler im Kreis" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(4,116,111,0.12);color:#04746F">KWBF</div>
+              <div class="type-name">Der Grübler im Kreis</div>
+              <ul class="type-bullets">
+                <li style="color:#04746F">Analysiert, hält fest</li>
+                <li>Wartet ab</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#E4F4F3">
+              <img src="KWSP.png" alt="Der Macher" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(4,116,111,0.12);color:#04746F">KWSP</div>
+              <div class="type-name">Der Macher</div>
+              <ul class="type-bullets">
+                <li style="color:#04746F">Analysiert, macht Schluss</li>
+                <li>Strukturiert</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#E4F4F3">
+              <img src="KWSF.png" alt="Der Rationaliserer" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(4,116,111,0.12);color:#04746F">KWSF</div>
+              <div class="type-name">Der Rationaliserer</div>
+              <ul class="type-bullets">
+                <li style="color:#04746F">Analysiert, macht Schluss</li>
+                <li>Lässt laufen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            <!-- Familie 4: Kopf + Ich -->
+      <div class="family-block">
+        <div class="family-header-bar" style="background:#484BB3">
+          
+          <span class="family-title">Die Klarköpfe</span>
+          <span class="family-subtitle">Kopf + Ich · Denkt alleine</span>
+        </div>
+        <div class="types-grid">
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#ECEDF8">
+              <img src="KIBP.png" alt="Der Kontrolleur" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(72,75,179,0.12);color:#484BB3">KIBP</div>
+              <div class="type-name">Der Kontrolleur</div>
+              <ul class="type-bullets">
+                <li style="color:#484BB3">Analysiert solo, hält fest</li>
+                <li>Braucht Plan</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#ECEDF8">
+              <img src="KIBF.png" alt="Der Philosophe" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(72,75,179,0.12);color:#484BB3">KIBF</div>
+              <div class="type-name">Der Philosophe</div>
+              <ul class="type-bullets">
+                <li style="color:#484BB3">Analysiert solo, hält fest</li>
+                <li>Wartet</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#ECEDF8">
+              <img src="KISP.png" alt="Der Stoiker" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(72,75,179,0.12);color:#484BB3">KISP</div>
+              <div class="type-name">Der Stoiker</div>
+              <ul class="type-bullets">
+                <li style="color:#484BB3">Analysiert solo, macht Schluss</li>
+                <li>Plant</li>
+              </ul>
+            </div>
+          </div>
+          <div class="type-card">
+            <div class="type-img-wrap" style="background:#ECEDF8">
+              <img src="KISF.png" alt="Der Verdränger" loading="lazy">
+            </div>
+            <div class="type-card-body">
+              <div class="type-code" style="background:rgba(72,75,179,0.12);color:#484BB3">KISF</div>
+              <div class="type-name">Der Verdränger</div>
+              <ul class="type-bullets">
+                <li style="color:#484BB3">Analysiert solo, macht Schluss</li>
+                <li>Lässt laufen</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            <div style="text-align:center;margin-top:56px;">
+        <a href="#quiz" class="btn-primary" style="display:inline-flex;">Finde deinen Typ →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist">
+    <div class="container">
+      <div class="tag" style="justify-content:center;">Nolvo · Coming Soon</div>
+      <h2 class="waitlist-h2">Sei dabei wenn<br><span>Nolvo live geht.</span></h2>
+      <p class="waitlist-sub">Wir bauen gerade etwas für Männer in genau dieser Situation. Kein Datum – aber du erfährst es als Erster.</p>
+      <div class="waitlist-form">
+        <input type="email" class="waitlist-input" placeholder="deine@email.de" />
+        <button class="btn-primary">Dabei sein →</button>
+      </div>
+      <p class="waitlist-note">Kein Spam. Nur eine Nachricht wenn Nolvo fertig ist.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <svg viewBox="0 0 111.31038 87.800797" xmlns="http://www.w3.org/2000/svg">
+            <path style="fill:#0F1A2E;stroke-width:0" d="m 60.34792,222.74738 v 84.45135 h 28.455017 l 41.067043,-53.30931 c 4.50083,-4.64165 5.72823,-4.25274 7.60189,-4.35336 0.69599,-0.0374 3.89641,0.12149 5.01043,4.43669 l 2.54166,53.09712 h 26.63435 v -57.3935 c -1.76594,-16.63396 -35.12463,-58.89639 -73.539113,0 L 87.39475,263.81851 v -40.89435 z" transform="translate(-60.347921,-219.39793)" />
+          </svg>
+        </div>
+        <div class="footer-copy">2025 Nolvo</div>
+        <div class="footer-links">
+          <a href="#" class="footer-link">Datenschutz</a>
+          <a href="#" class="footer-link">Impressum</a>
+          <a href="mailto:hello@nolvo.app" class="footer-link">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-links">
+      <a href="#how" class="mobile-menu-link" onclick="closeMenu()">Wie es funktioniert</a>
+      <a href="#science" class="mobile-menu-link" onclick="closeMenu()">Wissenschaft</a>
+      <a href="#quiz" class="mobile-menu-link" onclick="closeMenu()">Quiz</a>
+    </div>
+    <a href="#quiz" class="mobile-menu-cta" onclick="closeMenu()">Quiz starten →</a>
+  </div>
+
+  <script>
+    // Navbar scroll behavior – Qoves style
+    const navbar = document.getElementById('navbar');
+    function updateNav() {
+      if (window.scrollY > 100) {
+        navbar.classList.remove('at-top');
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+        navbar.classList.add('at-top');
+      }
+    }
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      hamburger.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    hamburger.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('open')) closeMenu();
+      else openMenu();
+    });
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) closeMenu();
+    });
+
+    // ── SYNAPSEN-FEUER (nur Mobile) ──
+    function initSynapses() {
+      const canvas = document.getElementById('synapseCanvas');
+      if (!canvas) return;
+
+      // Nur auf Mobile anzeigen
+      canvas.style.display = 'block';
+
+      const ctx = canvas.getContext('2d');
+      let W, H;
+
+      function resize() {
+        W = canvas.offsetWidth;
+        H = canvas.offsetHeight;
+        canvas.width = W;
+        canvas.height = H;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      const NEURON_COUNT = 38;
+      const neurons = [];
+      for (let i = 0; i < NEURON_COUNT; i++) {
+        neurons.push({
+          x: 20 + Math.random() * (W - 40),
+          y: 20 + Math.random() * (H * 0.72),
+          r: 1.4 + Math.random() * 1.0,
+          energy: 0,
+          refractory: 0,
+          connections: []
+        });
+      }
+      neurons.forEach((n, i) => {
+        const dists = neurons
+          .map((m, j) => ({ j, d: Math.hypot(n.x-m.x, n.y-m.y) }))
+          .filter(({ j, d }) => j !== i && d < 90)
+          .sort((a, b) => a.d - b.d)
+          .slice(0, 3);
+        n.connections = dists.map(d => d.j);
+      });
+
+      const pulses = [];
+
+      function firePulse(fromIdx, toIdx) {
+        pulses.push({ fromIdx, toIdx, progress: 0, speed: 0.018 + Math.random() * 0.012 });
+      }
+
+      function fireNeuron(idx, strength = 1.0) {
+        const n = neurons[idx];
+        if (n.refractory > 0 || n.energy > 0.3) return;
+        n.energy = strength;
+        n.refractory = 60 + Math.random() * 40;
+        n.connections.forEach(j => {
+          setTimeout(() => firePulse(idx, j), 80 + Math.random() * 120);
+        });
+      }
+
+      function spontaneousFire() {
+        const idx = Math.floor(Math.random() * NEURON_COUNT);
+        fireNeuron(idx, 0.8 + Math.random() * 0.2);
+        setTimeout(spontaneousFire, 800 + Math.random() * 1400);
+      }
+      spontaneousFire();
+
+      function draw() {
+        // Clear with dark background
+        const g = ctx.createLinearGradient(0, 0, W * 0.5, H);
+        g.addColorStop(0, '#0D1E2E');
+        g.addColorStop(0.5, '#080F1A');
+        g.addColorStop(1, '#060E18');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+
+        const now = Date.now();
+
+        // Pulses
+        for (let i = pulses.length - 1; i >= 0; i--) {
+          const p = pulses[i];
+          p.progress += p.speed;
+          const from = neurons[p.fromIdx], to = neurons[p.toIdx];
+          const px = from.x + (to.x - from.x) * p.progress;
+          const py = from.y + (to.y - from.y) * p.progress;
+
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(74,111,165,${0.06 + p.progress * 0.04})`;
+          ctx.lineWidth = 0.6;
+          ctx.moveTo(from.x, from.y);
+          ctx.lineTo(to.x, to.y);
+          ctx.stroke();
+
+          const pAlpha = Math.sin(p.progress * Math.PI) * 0.9;
+          const grd = ctx.createRadialGradient(px, py, 0, px, py, 8);
+          grd.addColorStop(0, `rgba(160,200,255,${pAlpha})`);
+          grd.addColorStop(1, 'rgba(100,150,255,0)');
+          ctx.beginPath();
+          ctx.fillStyle = grd;
+          ctx.arc(px, py, 8, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(220,235,255,${pAlpha})`;
+          ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (p.progress >= 1) {
+            pulses.splice(i, 1);
+            fireNeuron(p.toIdx, 0.6 + Math.random() * 0.3);
+          }
+        }
+
+        // Neurons
+        neurons.forEach(n => {
+          if (n.refractory > 0) n.refractory--;
+          if (n.energy > 0) n.energy *= 0.94;
+          if (n.energy < 0.01) n.energy = 0;
+          const e = n.energy;
+          const idle = 0.12 + Math.sin(now * 0.001 + n.x) * 0.04;
+          const alpha = e > 0 ? (e * 0.85 + idle) : idle;
+
+          if (e > 0.1) {
+            const glowR = n.r * (3 + e * 8);
+            const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR);
+            grd.addColorStop(0, `rgba(100,160,255,${e * 0.5})`);
+            grd.addColorStop(0.4, `rgba(60,100,200,${e * 0.15})`);
+            grd.addColorStop(1, 'rgba(60,100,200,0)');
+            ctx.beginPath();
+            ctx.fillStyle = grd;
+            ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          ctx.fillStyle = e > 0.1 ? `rgba(200,225,255,${alpha})` : `rgba(74,111,165,${alpha})`;
+          ctx.arc(n.x, n.y, n.r * (1 + e * 0.6), 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+    initSynapses();
+
+    // Quiz logic
+    // ── QUIZ LOGIC ──
+    const answers = {};
+
+    document.querySelectorAll('.quiz-opt').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const q = this.dataset.q;
+        document.querySelectorAll(`.quiz-opt[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        answers[q] = this.dataset.v;
+        const nb = document.getElementById(`next${q}`);
+        if (nb) nb.classList.add('ready');
+      });
+    });
+
+    function nextStep(current) {
+      if (!answers[current]) return;
+      document.getElementById(`step${current}`).classList.remove('visible');
+      const next = document.getElementById(`step${current+1}`);
+      if (next) next.classList.add('visible');
+      const pb = document.getElementById(`pb${current+1}`);
+      if (pb) pb.classList.add('active');
+      const currentStep = document.getElementById('step' + (current + 1));
+      if (currentStep) {
+        currentStep.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      }
+    }
+
+    // ── AXIS-BASED SCORING ──
+    // Each answer gives points on 4 axes: H/K, W/I, B/S, P/F
+    // Positive = first pole, Negative = second pole
+    const axisScoring = {
+      // F1: Herz↔Kopf + solo context
+      '1a': { H:2 },
+      '1b': { K:2 },
+      '1c': { K:1, I:1 },
+      '1d': { K:1, S:1 },
+      // F2: Wir↔Ich
+      '2a': { W:2 },
+      '2b': { I:2 },
+      '2c': { K:1, W:1 },
+      '2d': { I:2 },
+      // F3: Bewahren↔Schliessen
+      '3a': { H:1, B:2 },
+      '3b': { S:2 },
+      '3c': { K:1, S:1 },
+      '3d': { H:1, B:2 },
+      // F4: Plan↔Fluss
+      '4a': { P:2 },
+      '4b': { F:2 },
+      '4c': { H:1, B:1 },
+      '4d': { F:1, S:1 },
+      // F5: Herz↔Kopf (emotion)
+      '5a': { H:2 },
+      '5b': { K:2 },
+      '5c': { H:1, K:1 },
+      '5d': { K:1, S:1 },
+      // F6: Wir↔Ich (behaviour)
+      '6a': { W:2 },
+      '6b': { I:1, K:1 },
+      '6c': { H:1, B:2 },
+      '6d': { I:2 },
+      // F7: Bewahren↔Schliessen (acceptance)
+      '7a': { H:1, B:2 },
+      '7b': { S:2, F:1 },
+      '7c': { K:2, B:1 },
+      '7d': { K:1, S:2 },
+      // F8: Plan↔Fluss (need)
+      '8a': { P:2 },
+      '8b': { K:2 },
+      '8c': { S:1, F:1 },
+      '8d': { H:1, W:1 },
+    };
+
+    // Map axis combination to type code
+    function axesToCode(axes) {
+      const hk = axes.H >= axes.K ? 'H' : 'K';
+      const wi = axes.W >= axes.I ? 'W' : 'I';
+      const bs = axes.B >= axes.S ? 'B' : 'S';
+      const pf = axes.P >= axes.F ? 'P' : 'F';
+      return hk + wi + bs + pf;
+    }
+
+    // Type descriptions for all 16
+    const allTypes = {
+      HWBP: { name: 'Der Bewahrende Verbündete', desc: 'Du hältst fest und brauchst Struktur – aber du tust es nicht allein. Gemeinschaft ist deine Kraftquelle. Du willst verstehen und gleichzeitig nicht loslassen. Dein Guide hilft dir beides in Balance zu halten.', strength: 'Du weisst dass du Unterstützung brauchst – und holst sie dir auch.', risk: 'Du hältst zu lange fest. Irgendwann muss Loslassen ein aktiver Schritt werden.' },
+      HWBF: { name: 'Der Treue Begleiter', desc: 'Du heilst in Gemeinschaft und lässt der Zeit ihren Raum. Du hältst Erinnerungen fest aber drängst dich nicht. Du vertraust dem Prozess – solange du nicht allein bist. Dein Guide gibt dir Ankerpunkte für diesen Weg.', strength: 'Deine Geduld und dein Vertrauen in Beziehungen sind seltene Stärken.', risk: 'Warten ohne Richtung kann zu Stagnation werden. Zeit allein heilt nicht – du auch musst etwas tun.' },
+      HWSP: { name: 'Der Entschlossene', desc: 'Du willst handeln, einen Plan haben und du tust es am liebsten mit Menschen um dich herum. Du machst Schluss – aber nicht allein. Dein Guide gibt dir die Struktur die du brauchst.', strength: 'Du bist entschlossen und sozial – eine starke Kombination für echte Veränderung.', risk: 'Achte darauf dass der Plan nicht zur Ablenkung wird. Handeln ersetzt manchmal das Fühlen.' },
+      HWSF: { name: 'Der Loslasser', desc: 'Du hast innerlich abgeschlossen und vertraust dem Fluss. Du brauchst keine Struktur – du brauchst Menschen. Offen, bereit, aber nicht allein. Dein Guide begleitet dich auf diesem Weg vorwärts.', strength: 'Du bist emotional frei und offen für Neues – das ist ein grosses Geschenk.', risk: 'Zu schnelles Loslassen kann bedeuten dass etwas Wichtiges nicht verarbeitet wurde.' },
+      HIBP: { name: 'Der Stille Bewahrer', desc: 'Du fühlst tief, hältst fest und brauchst Struktur – aber allein. Du trägst vieles in dir ohne es zu zeigen. Dein Guide hilft dir diese Last zu organisieren ohne sie zu verdrängen.', strength: 'Deine innere Tiefe und Fähigkeit zur Selbstreflexion sind aussergewöhnlich.', risk: 'Allein tragen hat Grenzen. Irgendwann braucht es einen Kanal nach aussen.' },
+      HIBF: { name: 'Der Melancholiker', desc: 'Du fühlst tief, hältst fest und lässt der Zeit ihren Lauf – allein. Schmerz und Schönheit liegen bei dir nah beieinander. Du brauchst keinen Plan – du brauchst Raum. Dein Guide gibt dir diesen Raum mit Richtung.', strength: 'Deine emotionale Tiefe macht dich zu einem Menschen der wirklich versteht.', risk: 'Melancholie kann zur Gewohnheit werden. Achte darauf wann Trauern aufhört heilend zu sein.' },
+      HISP: { name: 'Der Stille Entschlossene', desc: 'Du hast innerlich entschieden und arbeitest allein daran. Du brauchst einen Plan – aber keine Zuschauer. Dein Guide gibt dir die Werkzeuge für diesen stillen aber kraftvollen Weg.', strength: 'Deine innere Entschlossenheit ohne externe Bestätigung zu brauchen ist echte Stärke.', risk: 'Allein handeln kann einsam werden. Ein Mensch der dich kennt kann mehr helfen als du denkst.' },
+      HISF: { name: 'Der Einsiedler', desc: 'Du hast akzeptiert und vertraust dem Fluss – ganz allein. Du brauchst keine Struktur und keine Gemeinschaft. Stille ist dein Weg. Dein Guide respektiert das und zeigt dir wie du in dieser Stille wirklich heilst.', strength: 'Deine Fähigkeit allein zu sein ohne dich zu verlieren ist selten und wertvoll.', risk: 'Echte Isolation kann von echter Heilung unterschieden werden – kennst du den Unterschied?' },
+      KWBP: { name: 'Der Stratege', desc: 'Du analysierst, planst und willst verstehen – am liebsten mit anderen. Du hältst fest weil du noch keine Antworten hast. Dein Guide gibt dir die Antworten und den Plan den du brauchst.', strength: 'Dein analytischer Geist kombiniert mit Offenheit für andere macht dich sehr handlungsfähig.', risk: 'Zu viel Analyse ohne Emotion kann die eigentliche Heilung blockieren.' },
+      KWBF: { name: 'Der Grübler im Kreis', desc: 'Du analysierst endlos, hältst fest und wartest – mit anderen um dich herum aber innerlich allein. Dein Kopf dreht Loops die keine Antwort liefern. Dein Guide hilft dir diesen Loop zu unterbrechen.', strength: 'Du bist ehrlich und tiefgründig – du gibst dich nicht mit oberflächlichen Antworten zufrieden.', risk: 'Grübeln ohne Handlung ist die grösste Falle. Erkenntnisse zählen erst wenn du etwas damit tust.',
+        introTitle: 'Dein Kopf sucht eine Antwort die es nicht gibt.',
+        introBody: 'Der Grübler analysiert weil er hofft, dass die richtige Erklärung den Schmerz auflöst. Das ist neurologisch verständlich – aber es funktioniert nicht so.',
+        timeline: [
+          { phase: 'Jetzt', title: 'Der endlose Loop', desc: 'Dieselben Fragen, immer wieder. Warum, wie, was hätte ich anders gemacht. Der Kopf sucht Kontrolle durch Verstehen.' },
+          { phase: 'Als nächstes', title: 'Den Loop unterbrechen', desc: 'Du lernst den Unterschied zwischen Verstehen und Loslassen. Nicht alle Fragen brauchen Antworten.' },
+          { phase: 'Dein Ziel', title: 'Klarheit ohne Obsession', desc: 'Du kannst nachdenken ohne dich zu verlieren. Analyse wird zum Werkzeug – nicht zur Falle.' }
+        ]
+      },
+      KWSP: { name: 'Der Macher', desc: 'Du analysierst, machst Schluss und setzt um – mit Menschen. Du brauchst Struktur und Gemeinschaft. Dein Guide gibt dir den Fahrplan für diesen aktiven Weg nach vorne.', strength: 'Du verbindest Analyse mit Entschlossenheit und sozialer Energie – eine seltene Kombination.', risk: 'Ständiges Handeln kann dazu führen dass der Schmerz nie wirklich verarbeitet wird.' },
+      KWSF: { name: 'Der Rationaliserer', desc: 'Du verstehst alles, hast abgeschlossen und lässt es laufen – mit anderen. Du klingst gefasster als du bist. Dein Guide hilft dir zu unterscheiden was du wirklich verarbeitet hast und was du nur erklärt hast.', strength: 'Deine Fähigkeit Komplexes zu verstehen und zu kommunizieren ist aussergewöhnlich.', risk: 'Verstehen ist nicht dasselbe wie Heilen. Das Herz braucht manchmal mehr als der Kopf liefern kann.' },
+      KIBP: { name: 'Der Kontrolleur', desc: 'Du analysierst solo, hältst fest und brauchst Struktur. Du willst jedes Detail verstehen bevor du loslässt. Dein Guide gibt dir den Rahmen den du brauchst ohne dich zu überfordern.', strength: 'Deine Präzision und Selbstdisziplin sind echte Stärken in schwierigen Phasen.', risk: 'Kontrolle ist eine Illusion. Je mehr du versuchst alles zu verstehen desto mehr verlierst du dich darin.' },
+      KIBF: { name: 'Der Philosophe', desc: 'Du analysierst tief, hältst fest und lässt der Zeit ihren Raum – ganz allein. Du lebst mit den grossen Fragen. Dein Guide gibt dir Perspektive ohne die Tiefe zu nehmen.', strength: 'Deine Fähigkeit tief zu reflektieren macht dich zu jemandem der aus dieser Erfahrung wirklich wächst.', risk: 'Philosophieren kann zur Flucht werden. Irgendwann braucht es konkrete Schritte nicht nur Gedanken.' },
+      KISP: { name: 'Der Stoiker', desc: 'Du hast analysiert, entschieden und planst solo. Du zeigst nichts nach aussen aber innen arbeitet es. Dein Guide respektiert deine Stärke und gibt dir die richtigen Werkzeuge.', strength: 'Deine innere Stärke und Disziplin sind bemerkenswert. Du brauchst keine Bestätigung von aussen.', risk: 'Stoizismus kann zu emotionaler Isolation führen. Nicht alles muss allein getragen werden.' },
+      KISF: { name: 'Der Verdränger', desc: 'Du hast im Kopf abgeschlossen, lässt es laufen und tust es allein. Gym, Arbeit, Routine – von aussen funktioniert alles. Innen läuft etwas auf Hochtouren das du noch nicht angeschaut hast. Dein Guide zeigt dir was wirklich passiert.', strength: 'Deine Stabilität und Funktionsfähigkeit sind in schwierigen Zeiten eine echte Stärke.', risk: 'Verdrängen hat einen Preis – irgendwann kommt es raus. Je länger du wartest desto schwerer wird es.',
+        introTitle: 'Du funktionierst. Das ist dein Muster.',
+        introBody: 'Verdränger sind oft die stabilsten Menschen im Raum – nach aussen. Aber Stabilität ist nicht dasselbe wie Verarbeitung. Dein Nervensystem läuft auf Hochtouren, auch wenn du es nicht spürst.',
+        timeline: [
+          { phase: 'Jetzt', title: 'Der stille Sturm', desc: 'Du funktionierst nach aussen. Innen läuft das Stresssystem auf vollen Touren – auch wenn du es nicht bemerkst.' },
+          { phase: 'Als nächstes', title: 'Das erste Hinschauen', desc: 'Du erlaubst dir einen kurzen Moment der Ehrlichkeit. Nicht viel – aber genug um zu verstehen was wirklich passiert.' },
+          { phase: 'Dein Ziel', title: 'Stärke mit Tiefe', desc: 'Du bleibst stabil – aber jetzt auch innen. Du weisst was los ist und kannst damit umgehen.' }
+        ]
+      },
+    };
+
+        // 16-type code mapping
+    const typeToCode = {
+      verdraenger: 'KISF', gruebler: 'KWBF', rationaliserer: 'KWSF',
+      isolierter: 'HISF', wuetender: 'KWSP', fluechter: 'HWSF',
+      nostalgiker: 'HWBF', selbstanklaeger: 'HIBP', taubgewordener: 'HIBF',
+      klammerer: 'HWBP', verarbeiter: 'HWSP'
+    };
+
+    const families = {
+      hw: { name: 'Die Herzensoffenen', color: '#C15134', subtitle: 'Herz + Wir',
+        types: [
+          { code: 'HWBP', name: 'Der Bewahrende Verbündete' },
+          { code: 'HWBF', name: 'Der Treue Begleiter' },
+          { code: 'HWSP', name: 'Der Entschlossene' },
+          { code: 'HWSF', name: 'Der Loslasser' }
+        ]
+      },
+      hi: { name: 'Die Tiefgründigen', color: '#ED9D0A', subtitle: 'Herz + Ich',
+        types: [
+          { code: 'HIBP', name: 'Der Stille Bewahrer' },
+          { code: 'HIBF', name: 'Der Melancholiker' },
+          { code: 'HISP', name: 'Der Stille Entschlossene' },
+          { code: 'HISF', name: 'Der Einsiedler' }
+        ]
+      },
+      kw: { name: 'Die Besprecher', color: '#04746F', subtitle: 'Kopf + Wir',
+        types: [
+          { code: 'KWBP', name: 'Der Stratege' },
+          { code: 'KWBF', name: 'Der Grübler im Kreis' },
+          { code: 'KWSP', name: 'Der Macher' },
+          { code: 'KWSF', name: 'Der Rationaliserer' }
+        ]
+      },
+      ki: { name: 'Die Klarköpfe', color: '#484BB3', subtitle: 'Kopf + Ich',
+        types: [
+          { code: 'KIBP', name: 'Der Kontrolleur' },
+          { code: 'KIBF', name: 'Der Philosophe' },
+          { code: 'KISP', name: 'Der Stoiker' },
+          { code: 'KISF', name: 'Der Verdränger' }
+        ]
+      }
+    };
+
+    function getFamily(code) {
+      const prefix = code.substring(0,2).toLowerCase();
+      return { key: prefix, ...families[prefix] };
+    }
+
+    function showResult() {
+      if (!answers[8]) return;
+
+      // Calculate axis scores
+      const axes = { H:0, K:0, W:0, I:0, B:0, S:0, P:0, F:0 };
+      for (let q = 1; q <= 8; q++) {
+        const key = q + (answers[q] || 'a');
+        const pts = axisScoring[key] || {};
+        Object.entries(pts).forEach(([ax, p]) => { axes[ax] = (axes[ax] || 0) + p; });
+      }
+
+      // Determine 4-letter code
+      const code = axesToCode(axes);
+      const type = allTypes[code] || allTypes['KISF'];
+      const winner = code;
+      const family = getFamily(code);
+
+      document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('visible'));
+      document.querySelectorAll('.quiz-bar').forEach(b => b.classList.add('active'));
+
+      // Fill result
+      document.getElementById('result-code').textContent = code;
+      document.getElementById('result-type').textContent = type.name;
+      document.getElementById('result-desc').textContent = type.desc;
+      document.getElementById('result-family').textContent = family.subtitle + ' · ' + family.name;
+
+      // Insight strength/risk
+      const insightEl = document.getElementById('result-insight');
+      if (insightEl) {
+        insightEl.innerHTML = `
+          <div class="result-insight-row">
+            <div class="result-insight-item result-insight-strength">
+              <h4>Deine Stärke</h4>
+              <p>${type.strength || ''}</p>
+            </div>
+            <div class="result-insight-item result-insight-risk">
+              <h4>Dein Risiko</h4>
+              <p>${type.risk || ''}</p>
+            </div>
+          </div>`;
+      }
+
+      // Badge color
+      const badge = document.getElementById('result-badge');
+      badge.style.background = family.color;
+      badge.style.border = 'none';
+      badge.textContent = 'Dein Typ';
+
+      // Image
+      const img = document.getElementById('result-img');
+      const imgWrap = document.getElementById('result-img-wrap');
+      img.src = code + '.png';
+      img.alt = type.name;
+      imgWrap.style.background = family.color + '22';
+
+      // Axes sliders - use actual scores for precise positioning
+      function axisPercent(a, b) {
+        const total = (axes[a] || 0) + (axes[b] || 0);
+        if (total === 0) return 50;
+        return Math.round(((axes[a] || 0) / total) * 100);
+      }
+      const axesDefs = [
+        { label1: 'Herz', label2: 'Kopf', value: axisPercent('H','K') },
+        { label1: 'Wir', label2: 'Ich', value: axisPercent('W','I') },
+        { label1: 'Bewahren', label2: 'Schliessen', value: axisPercent('B','S') },
+        { label1: 'Plan', label2: 'Fluss', value: axisPercent('P','F') },
+      ];
+      const axesList = document.getElementById('result-axes-list');
+      axesList.innerHTML = '';
+      axesDefs.forEach(ax => {
+        const isLeft = ax.value <= 50;
+        const div = document.createElement('div');
+        div.className = 'result-axis';
+        div.innerHTML = `
+          <div class="result-axis-labels">
+            <span class="${isLeft ? 'result-axis-label-active' : ''}">${ax.label1}</span>
+            <span class="${!isLeft ? 'result-axis-label-active' : ''}">${ax.label2}</span>
+          </div>
+          <div class="result-axis-track">
+            <div class="result-axis-fill" style="width:${ax.value}%;background:${family.color}"></div>
+            <div class="result-axis-thumb" style="left:${ax.value}%"></div>
+          </div>`;
+        axesList.appendChild(div);
+      });
+
+
+
+      // ── INTRO TEXT ──
+      const introTitleEl = document.getElementById('result-intro-title');
+      const introBodyEl = document.getElementById('result-intro-body');
+      if (introTitleEl && type.introTitle) {
+        introTitleEl.textContent = type.introTitle;
+        introBodyEl.textContent = type.introBody;
+      } else if (introTitleEl) {
+        introTitleEl.textContent = 'Dein Bewältigungsmuster verstehen.';
+        introBodyEl.textContent = 'Jeder Mensch verarbeitet Schmerz anders. Dein Profil zeigt wie du vorgehst – und wo dein grösster Hebel für Veränderung liegt.';
+      }
+
+      // ── TIMELINE ──
+      const tlSteps = document.getElementById('result-timeline-steps');
+      if (tlSteps) {
+        const steps = type.timeline || [
+          { phase: 'Jetzt', title: 'Mitten im Sturm', desc: 'Du befindest dich in der akuten Phase. Dein Nervensystem ist aktiviert, die Gedanken kreisen.' },
+          { phase: 'Als nächstes', title: 'Stabilisierung', desc: 'Du lernst dein Muster kennen und bekommst konkrete Werkzeuge die zu dir passen.' },
+          { phase: 'Dein Ziel', title: 'Echter Neustart', desc: 'Du kommst stärker raus als du reingegangen bist. Nicht trotz dieser Erfahrung – sondern wegen ihr.' }
+        ];
+        tlSteps.innerHTML = '';
+        steps.forEach((step, i) => {
+          const isActive = i === 0;
+          const div = document.createElement('div');
+          div.className = 'result-tl-step';
+          div.innerHTML = `
+            <div class="result-tl-dot ${isActive ? 'active' : ''}"
+                 style="background:${isActive ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.05)'}; color:${isActive ? '#fff' : 'rgba(255,255,255,0.3)'}">
+              ${i+1}
+            </div>
+            <div class="result-tl-content">
+              <div class="result-tl-phase">${step.phase}</div>
+              <div class="result-tl-title" style="color:${isActive ? '#fff' : 'rgba(255,255,255,0.6)'}">${step.title}</div>
+              <div class="result-tl-desc">${step.desc}</div>
+            </div>`;
+          tlSteps.appendChild(div);
+        });
+      }
+
+            // Family comparison grid
+      const grid = document.getElementById('result-families-grid');
+      grid.innerHTML = '';
+      Object.entries(families).forEach(([key, fam]) => {
+        const isMyFamily = key === family.key;
+        const card = document.createElement('div');
+        card.className = 'result-family-card' + (isMyFamily ? ' is-mine' : '');
+
+        const header = document.createElement('div');
+        header.className = 'result-family-header';
+        header.style.background = fam.color;
+        header.textContent = fam.name;
+        card.appendChild(header);
+
+        const typesDiv = document.createElement('div');
+        typesDiv.className = 'result-family-types';
+        fam.types.forEach(t => {
+          const isMyType = t.code === code;
+          const row = document.createElement('div');
+          row.className = 'result-family-type' + (isMyType ? ' is-mine' : '');
+          row.innerHTML = `<span class="result-family-type-dot"></span>${t.name}` +
+            (isMyType ? `<span class="result-mine-tag">Du</span>` : '');
+          typesDiv.appendChild(row);
+        });
+        card.appendChild(typesDiv);
+        grid.appendChild(card);
+      });
+
+      document.getElementById('quiz-result').classList.add('visible');
+      document.getElementById('quiz').scrollIntoView({ behavior:'smooth', block:'start' });
+
+      window._quizType = winner;
+      window._quizTypeName = type.name;
+    }
+
+    // ── MAILERLITE CONFIG ──
+    const MAILERLITE_API_KEY = 'DEIN_API_KEY_HIER';
+
+    // Gruppe-IDs pro Typ – nach Erstellung in MailerLite hier eintragen
+    const MAILERLITE_GROUPS = {
+      verdraenger:     'GRUPPE_ID_VERDRAENGER',
+      gruebler:        'GRUPPE_ID_GRUEBLER',
+      rationaliserer:  'GRUPPE_ID_RATIONALISERER',
+      isolierter:      'GRUPPE_ID_ISOLIERTER',
+      wuetender:       'GRUPPE_ID_WUETENDER',
+      fluechter:       'GRUPPE_ID_FLUECHTER',
+      nostalgiker:     'GRUPPE_ID_NOSTALGIKER',
+      selbstanklaeger: 'GRUPPE_ID_SELBSTANKLAEGER',
+      taubgewordener:  'GRUPPE_ID_TAUBGEWORDENER',
+      klammerer:       'GRUPPE_ID_KLAMMERER',
+      verarbeiter:     'GRUPPE_ID_VERARBEITER',
+    };
+
+    async function submitQuiz() {
+      const email = document.getElementById('quiz-email').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('Bitte gib eine gültige Email-Adresse ein.');
+        return;
+      }
+
+      const btn = document.querySelector('.quiz-result .btn-primary');
+      btn.textContent = 'Wird gesendet...';
+      btn.style.opacity = '0.6';
+      btn.style.pointerEvents = 'none';
+
+      const type = window._quizType || 'verdraenger';
+      const typeName = window._quizTypeName || 'Der Verdränger';
+      const groupId = MAILERLITE_GROUPS[type];
+
+      try {
+        // 1. Kontakt anlegen mit Quiz-Typ als Feld
+        const contactRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${MAILERLITE_API_KEY}`,
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            fields: {
+              quiz_typ: typeName,
+              quiz_typ_key: type,
+            },
+            groups: groupId && !groupId.startsWith('GRUPPE') ? [groupId] : [],
+          })
+        });
+
+        if (contactRes.ok) {
+          btn.textContent = '✓ Guide ist unterwegs!';
+          btn.style.opacity = '1';
+          btn.style.background = '#2D7A5E';
+          document.getElementById('quiz-email').style.display = 'none';
+          const note = document.querySelector('.result-note');
+          if (note) note.textContent = 'Schau in dein Postfach – dein Guide kommt gleich an.';
+        } else {
+          throw new Error('API Fehler');
+        }
+      } catch (err) {
+        console.error(err);
+        btn.textContent = 'Fehler – nochmal versuchen';
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'all';
+        btn.style.background = '#c0392b';
+      }
+    }
+
+    // ── SYNAPSEN-FEUER (nur Mobile) ──
+
+
+
+  </script>
+</body>
+</html>
