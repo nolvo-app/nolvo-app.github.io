@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impressum – Nolvo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F6F4F1; --white: #fff; --ink: #0F1A2E;
+      --text: #1A1A1A; --text-mid: #4A4A4A; --text-dim: #888;
+      --accent: #484BB3; --border: rgba(15,26,46,0.1);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --r: 14px; --max: 720px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #111318; --white: #1E2128; --ink: #E4E6EC; --text: #E4E6EC; --text-mid: #9AA3B2; --text-dim: #5A6370; --border: rgba(255,255,255,0.08); }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-weight: 400; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    .nav { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 10; }
+    .nav-logo { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+    .nav-back { font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+    .nav-back:hover { color: var(--accent); }
+    .content { max-width: var(--max); margin: 0 auto; padding: 64px 24px 96px; }
+    .page-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .page-tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+    h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 48px; line-height: 1.1; }
+    .section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+    h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em; }
+    p { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 8px; }
+    p:last-child { margin-bottom: 0; }
+    footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo">Nolvo</div>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+  <div class="content">
+    <div class="page-tag">Rechtliches</div>
+    <h1>Impressum</h1>
+    <div class="section">
+      <h2>Verantwortlich für den Inhalt</h2>
+      <p>Raphael Walker<br>Leitschachweg 7<br>6472 Erstfeld<br>Schweiz</p>
+      <p>E-Mail: <a href="mailto:nolvoapp@gmail.com">nolvoapp@gmail.com</a></p>
+      <p>Website: <a href="https://nolvo.app">nolvo.app</a></p>
+    </div>
+    <div class="section">
+      <h2>Haftungsausschluss</h2>
+      <p>Die Inhalte dieser Website werden mit grösstmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der bereitgestellten Inhalte wird jedoch keine Gewähr übernommen.</p>
+    </div>
+    <div class="section">
+      <h2>Urheberrecht</h2>
+      <p>Die auf dieser Website veröffentlichten Inhalte und Werke unterliegen dem schweizerischen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung oder sonstige Verwendung ausserhalb der Grenzen des Urheberrechts bedarf der vorherigen Zustimmung des jeweiligen Rechteinhabers.</p>
+    </div>
+    <div class="section">
+      <h2>Kontakt</h2>
+      <p>Bei Fragen zu dieser Website kontaktiere uns per E-Mail: <a href="mailto:nolvoapp@gmail.com">nolvoapp@gmail.com</a></p>
+    </div>
+  </div>
+  <footer>2025 Nolvo · <a href="datenschutz.html">Datenschutz</a> · <a href="impressum.html">Impressum</a></footer>
+</body>
+</html>

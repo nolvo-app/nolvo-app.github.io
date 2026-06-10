@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datenschutz – Nolvo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F6F4F1; --white: #fff; --ink: #0F1A2E;
+      --text: #1A1A1A; --text-mid: #4A4A4A; --text-dim: #888;
+      --accent: #484BB3; --border: rgba(15,26,46,0.1);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --max: 720px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #111318; --white: #1E2128; --ink: #E4E6EC; --text: #E4E6EC; --text-mid: #9AA3B2; --text-dim: #5A6370; --border: rgba(255,255,255,0.08); }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent); text-decoration: none; }
+    .nav { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 10; }
+    .nav-logo { font-size: 17px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; }
+    .nav-back { font-size: 13px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+    .nav-back:hover { color: var(--accent); }
+    .content { max-width: var(--max); margin: 0 auto; padding: 64px 24px 96px; }
+    .page-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .page-tag::before { content: ''; width: 18px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+    h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 12px; line-height: 1.1; }
+    .subtitle { font-size: 14px; color: var(--text-dim); margin-bottom: 48px; }
+    .section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+    h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 12px; letter-spacing: -0.01em; }
+    p { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 10px; }
+    p:last-child { margin-bottom: 0; }
+    ul { margin: 8px 0 10px 20px; }
+    ul li { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 4px; }
+    footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 12px; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo">Nolvo</div>
+    <a href="index.html" class="nav-back">← Zurück</a>
+  </nav>
+
+  <div class="content">
+    <div class="page-tag">Rechtliches</div>
+    <h1>Datenschutzerklärung</h1>
+    <p class="subtitle">Stand: Januar 2025</p>
+
+    <div class="section">
+      <h2>1. Verantwortlicher</h2>
+      <p>Raphael Walker<br>Leitschachweg 7<br>6472 Erstfeld, Schweiz<br>E-Mail: <a href="mailto:nolvoapp@gmail.com">nolvoapp@gmail.com</a></p>
+    </div>
+
+    <div class="section">
+      <h2>2. Welche Daten wir erheben</h2>
+      <p>Wir erheben nur Daten die du uns freiwillig gibst:</p>
+      <ul>
+        <li><strong>E-Mail-Adresse</strong> – wenn du das Quiz ausfüllst und deinen Guide anforderst</li>
+        <li><strong>Quiz-Ergebnis</strong> – dein Bewältigungstyp (z.B. «Der Verdränger»)</li>
+      </ul>
+      <p>Wir erheben keine sensiblen Gesundheitsdaten. Das Quiz dient der Selbstreflexion und ist kein medizinisches Instrument.</p>
+    </div>
+
+    <div class="section">
+      <h2>3. Wofür wir deine Daten nutzen</h2>
+      <ul>
+        <li>Versand deines persönlichen Guides per E-Mail</li>
+        <li>Information über den Launch der Nolvo App</li>
+        <li>Verbesserung unserer Inhalte (anonymisiert)</li>
+      </ul>
+      <p>Wir verkaufen deine Daten niemals an Dritte.</p>
+    </div>
+
+    <div class="section">
+      <h2>4. E-Mail-Dienst (MailerLite)</h2>
+      <p>Wir nutzen <strong>MailerLite</strong> zum Versand von E-Mails. Deine E-Mail-Adresse wird auf Servern von MailerLite gespeichert. MailerLite ist DSGVO-konform. Weitere Informationen: <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank">mailerlite.com/privacy</a></p>
+    </div>
+
+    <div class="section">
+      <h2>5. Cookies und Tracking</h2>
+      <p>Nolvo verwendet keine Tracking-Cookies und kein Analytics. Es werden keine Nutzerprofile erstellt und kein Verhalten getrackt.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Hosting (GitHub Pages)</h2>
+      <p>Diese Website wird über GitHub Pages gehostet. GitHub kann technische Zugriffsdaten (IP-Adressen, Browsertyp) in Server-Logs speichern. Diese Daten werden nicht mit uns geteilt. Datenschutzerklärung von GitHub: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">github.com/privacy</a></p>
+    </div>
+
+    <div class="section">
+      <h2>7. Deine Rechte</h2>
+      <p>Du hast jederzeit das Recht auf:</p>
+      <ul>
+        <li>Auskunft über deine gespeicherten Daten</li>
+        <li>Berichtigung falscher Daten</li>
+        <li>Löschung deiner Daten</li>
+        <li>Abmeldung vom E-Mail-Verteiler (Link in jeder E-Mail)</li>
+      </ul>
+      <p>Für alle Anfragen: <a href="mailto:nolvoapp@gmail.com">nolvoapp@gmail.com</a></p>
+    </div>
+
+    <div class="section">
+      <h2>8. Kein Therapie-Ersatz</h2>
+      <p>Nolvo ist kein medizinisches Produkt und ersetzt keine professionelle psychologische Beratung. Bei ernsthaften psychischen Problemen wende dich bitte an einen Arzt oder Therapeuten.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Änderungen</h2>
+      <p>Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen. Die aktuelle Version ist stets auf dieser Seite verfügbar.</p>
+    </div>
+
+  </div>
+
+  <footer>2025 Nolvo · <a href="datenschutz.html">Datenschutz</a> · <a href="impressum.html">Impressum</a></footer>
+</body>
+</html>
